@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="app_name">Sleepyhead\'Z alarm</string>
+    <string name="bt_add_alarm">アラームの追加</string>
+    <string name="tv_snooze">5分後にアラームをセットしたよ！</string>
+
+    <string name="tv_timer_setter">アラームセット中</string>
+    <string name="tv_start_time">開始時間</string>
+    <string name="tv_end_time">終了時間</string>
+    <string name="tv_alarm_time">何分後には起きたい？</string>
+    <string name="tv_alarm_count">アラームの回数</string>
+    <string name="tv_default_time">0:00</string>
+    <string name="tv_colon">:</string>
+    <string name="tv_tilde">～</string>
+    <string name="tv_minute">分</string>
+    <string name="tv_count">回</string>
+    <string name="bt_time_minus20">-20</string>
+    <string name="bt_time_minus5">-5</string>
+    <string name="bt_time_plus5">+5</string>
+    <string name="bt_time_plus20">+20</string>
+    <string name="bt_count_minus3">-3</string>
+    <string name="bt_count_minus1">-1</string>
+    <string name="bt_count_plus1">+1</string>
+    <string name="bt_count_plus3">+3</string>
+    <string name="bt_OK">OK</string>
+    <string name="bt_back">CANCEL</string>
+    <string name="bt_delete">DELETE</string>
+    <string name="tv_alarm_set">アラームを設定したよ！</string>
+    <string name="tv_cancel">キャンセルしたよ！</string>
+    <string name="tv_alarm_delete">アラームを消去したよ！</string>
+
+    <string name="ct_delete">削除</string>
+    <string name="bt_stop">STOP</string>
+</resources>
