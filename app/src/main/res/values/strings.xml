@@ -2,7 +2,8 @@
 <resources>
     <string name="app_name">Sleepyhead\'Z alarm</string>
     <string name="bt_add_alarm">アラームの追加</string>
-    <string name="tv_snooze">5分後にアラームをセットしたよ！</string>
+    <string name="bt_add_snooze">スヌーズ</string>
+    <string name="tv_snooze">5分後には起きようね！</string>
 
     <string name="tv_timer_setter">アラームセット中</string>
     <string name="tv_start_time">開始時間</string>

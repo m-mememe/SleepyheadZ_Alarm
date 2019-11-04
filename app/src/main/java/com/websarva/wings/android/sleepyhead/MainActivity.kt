@@ -24,7 +24,9 @@ import androidx.core.app.ComponentActivity.ExtraData
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.util.Log
 import android.widget.Toast
+import io.realm.kotlin.where
 import java.util.*
 
 
@@ -70,11 +72,22 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    //5分タイマーのセットボタン
+    fun onAddSnoozeClick(view: View){
+        registerSnooze()
+    }
+
     //アラームのセット
     private fun registerAlarm(){
+        val alarmDataId = intent.getLongExtra("id", 0L)
+        val alarmData = realm.where<AlarmData>().equalTo("id", alarmDataId).findFirst()
+
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
-        calendar.add(Calendar.SECOND,5)
+        if(alarmDataId > 0L){
+            calendar.add(Calendar.SECOND, alarmData?.alarmTime!!.toInt())
+            Log.e("a", "${alarmData.alarmTime.toString()}")
+        }
 
         val intent = Intent(this, AlarmBroadcastReceiver::class.java)
         val pending = PendingIntent.getBroadcast(this,0,intent,0)
@@ -89,5 +102,19 @@ class MainActivity : AppCompatActivity() {
 //        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 //        alarmManager.cancel(getPendingIntent())
 //        pref.delete("alarm_time")
+    }
+
+    //5分タイマーをセット
+    private fun registerSnooze(){
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = System.currentTimeMillis()
+        calendar.add(Calendar.SECOND, 300)
+
+        val intent = Intent(this, AlarmBroadcastReceiver::class.java)
+        val pending = PendingIntent.getBroadcast(this,0,intent,0)
+
+        val am : AlarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        am.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pending)
+        Toast.makeText(this, R.string.tv_snooze, Toast.LENGTH_SHORT).show()
     }
 }
