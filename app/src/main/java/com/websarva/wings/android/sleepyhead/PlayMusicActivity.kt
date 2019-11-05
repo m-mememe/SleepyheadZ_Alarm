@@ -2,15 +2,11 @@ package com.websarva.wings.android.sleepyhead
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import android.view.WindowManager
 import android.widget.Toast
-
-//import androidx.core.app.ComponentActivity
-//import androidx.core.app.ComponentActivity.ExtraData
-//import androidx.core.content.ContextCompat.getSystemService
-//import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 
 class PlayMusicActivity: AppCompatActivity(){
 
@@ -27,8 +23,12 @@ class PlayMusicActivity: AppCompatActivity(){
         Toast.makeText(this, "AlarmAwake", Toast.LENGTH_LONG).show()
     }
 
-    fun stopAlarm(view: View){
+    override fun onDestroy() {
         stopService(Intent(this, PlayMusicService::class.java))
+        super.onDestroy()
+    }
+
+    fun stopAlarm(view: View){
         finish()
     }
 }

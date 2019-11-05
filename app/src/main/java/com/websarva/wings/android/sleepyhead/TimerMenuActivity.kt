@@ -18,7 +18,7 @@ class TimerMenuActivity : AppCompatActivity() {
     private lateinit var realm: Realm
     private val minAlarmTime = 5
     private val maxAlarmTime = 180
-    private val minCount = 1
+    private val minCount = 2
     private val maxCount = 30
 
     //アラームのパラメータ
@@ -201,9 +201,9 @@ class TimerMenuActivity : AppCompatActivity() {
         //1分あたり1アラームのため、カウントが（終了時間ー開始時間）よりも大きかったら小さくする
         val start = _startHour * 60 + _startMinute
         val end = _endHour * 60 + _endMinute
-        if(end - start + 1 < _count){
+        if(end - start + 2 < _count){
             //日をまたがない場合
-            if(start < end) _count = end - start + 1
+            if(start < end) _count = end - start + 2
             //日をまたぐ場合
         }
 
@@ -304,7 +304,7 @@ class TimerMenuActivity : AppCompatActivity() {
     }
 
     //時間が日をまたいでいるか判定
-    private fun isDayChanges(startHour: Int, startMinute: Int, endHour: Int, endMinute: Int): Boolean{
+    private fun isDayChange(startHour: Int, startMinute: Int, endHour: Int, endMinute: Int): Boolean{
         val start = startHour * 60 + startMinute
         val end = endHour * 60 + endMinute
         if(start > end) return true

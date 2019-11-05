@@ -12,6 +12,5 @@ class AlarmBroadcastReceiver: BroadcastReceiver() {
         val activityIntent = Intent(context, PlayMusicActivity::class.java)
         activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context?.startActivity(activityIntent)
-        Toast.makeText(context, "AlarmSet", Toast.LENGTH_LONG).show()
     }
 }
