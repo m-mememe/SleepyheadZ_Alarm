@@ -1,8 +1,7 @@
-package com.websarva.wings.android.sleepyhead
+package com.niked4.wings.android.sleepyheadzAlarm
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import android.view.WindowManager
@@ -19,7 +18,6 @@ class PlayMusicActivity: AppCompatActivity(){
             WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
             WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
         )
-
 
         startService(Intent(this, PlayMusicService::class.java))
         Toast.makeText(this, R.string.tv_alarm_awake, Toast.LENGTH_LONG).show()

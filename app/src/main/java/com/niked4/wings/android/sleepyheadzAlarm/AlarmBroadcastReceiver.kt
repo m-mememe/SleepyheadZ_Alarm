@@ -1,9 +1,8 @@
-package com.websarva.wings.android.sleepyhead
+package com.niked4.wings.android.sleepyheadzAlarm
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.widget.Toast
 
 class AlarmBroadcastReceiver: BroadcastReceiver() {
 

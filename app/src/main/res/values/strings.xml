@@ -5,15 +5,12 @@
     <string name="bt_add_snooze">SNOOZE</string>
     <string name="tv_snooze">5分後には起きようね！</string>
 
-    <string name="tv_timer_setter">アラームセット中</string>
-    <string name="tv_start_time">開始時間</string>
-    <string name="tv_end_time">終了時間</string>
-    <string name="tv_alarm_time">何分後には起きたい？</string>
-    <string name="tv_alarm_count">アラームの回数</string>
+    <string name="tv_start_time">Start</string>
+    <string name="tv_end_time">End</string>
+    <string name="tv_alarm_count">Count</string>
     <string name="tv_default_time">0:00</string>
     <string name="tv_colon">:</string>
     <string name="tv_tilde">～</string>
-    <string name="tv_minute">分</string>
     <string name="tv_count">回</string>
     <string name="bt_count_minus3">-3</string>
     <string name="bt_count_minus1">-1</string>
@@ -27,7 +24,6 @@
     <string name="tv_alarm_delete">アラームを消去したよ！</string>
     <string name="tv_set_error">時間差は3時間以下にしてね！</string>
 
-    <string name="ct_delete">削除</string>
     <string name="bt_stop">STOP</string>
     <string name="tv_alarm_awake">時間だよ！起きて！</string>
 </resources>

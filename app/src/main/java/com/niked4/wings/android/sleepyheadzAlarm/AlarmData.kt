@@ -1,4 +1,4 @@
-package com.websarva.wings.android.sleepyhead
+package com.niked4.wings.android.sleepyheadzAlarm
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey

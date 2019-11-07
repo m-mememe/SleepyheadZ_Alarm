@@ -1,4 +1,4 @@
-package com.websarva.wings.android.sleepyhead
+package com.niked4.wings.android.sleepyheadzAlarm
 
 import android.app.Service
 import android.content.Intent

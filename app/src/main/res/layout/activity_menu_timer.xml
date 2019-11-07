@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="@string/tv_start_time"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:text="@string/tv_end_time"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -61,7 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:text="@string/tv_alarm_count"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -72,7 +72,7 @@
         android:id="@+id/bt_alarm_count_minus20"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
+        android:layout_marginStart="40dp"
         android:background="@drawable/button_background_blue"
         android:onClick="alarmCountMinus3"
         android:text="@string/bt_count_minus3"
@@ -104,16 +104,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/tv_count"
-        android:textSize="30sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/bt_alarm_count_minus20"
-        app:layout_constraintEnd_toStartOf="@+id/bt_alarm_count_plus5" />
-
     <Button
         android:id="@+id/bt_alarm_count_plus5"
         android:layout_width="50dp"
@@ -130,7 +120,7 @@
         android:id="@+id/bt_alarm_count_plus20"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="48dp"
+        android:layout_marginEnd="40dp"
         android:background="@drawable/button_background_blue"
         android:onClick="alarmCountPlus3"
         android:text="@string/bt_count_plus3"
@@ -175,4 +165,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bt_OK" />
+
+    <Switch
+        android:id="@+id/sw_connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="connect"
+        app:layout_constraintBottom_toBottomOf="@+id/textView3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/bt_start_time"
+        app:layout_constraintTop_toBottomOf="@+id/bt_start_time" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

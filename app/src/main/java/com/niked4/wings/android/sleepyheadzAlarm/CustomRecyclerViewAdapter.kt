@@ -1,15 +1,12 @@
-package com.websarva.wings.android.sleepyhead
+package com.niked4.wings.android.sleepyheadzAlarm
 
 import android.content.Intent
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import io.realm.Realm
 import io.realm.RealmResults
-import io.realm.kotlin.where
 
 class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): RecyclerView.Adapter<ViewHolder>() {
     private lateinit var realm: Realm

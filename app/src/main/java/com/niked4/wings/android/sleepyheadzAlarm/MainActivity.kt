@@ -1,4 +1,4 @@
-package com.websarva.wings.android.sleepyhead
+package com.niked4.wings.android.sleepyheadzAlarm
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +10,6 @@ import io.realm.Realm
 import io.realm.Sort
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.util.Log
 import android.widget.Toast
 import io.realm.kotlin.where
 import java.util.*
@@ -99,7 +98,8 @@ class MainActivity : AppCompatActivity() {
         var startTime = (startHour ?: 0) * 60 + (startMinute ?: 0) - timeNow
         if (startTime < 0) startTime += 24 * 60
         var deltaTime: Double = alarmTime?.toDouble() ?: 0.0
-        deltaTime /= (count ?: 0) - 1
+        if(count == 1) deltaTime = 0.0
+        else deltaTime /= (count ?: 0) - 1
         return Pair(startTime, deltaTime)
     }
 

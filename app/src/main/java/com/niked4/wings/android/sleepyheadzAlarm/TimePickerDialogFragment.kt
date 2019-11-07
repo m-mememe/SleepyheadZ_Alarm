@@ -1,16 +1,12 @@
-package com.websarva.wings.android.sleepyhead
+package com.niked4.wings.android.sleepyheadzAlarm
 
 import android.app.AlertDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.text.format.DateFormat
-import android.util.Log
-import android.widget.Button
 import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
-import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.activity_menu_timer.*
 import java.util.*
 
