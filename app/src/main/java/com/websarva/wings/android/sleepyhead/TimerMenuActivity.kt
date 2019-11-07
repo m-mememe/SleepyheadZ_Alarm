@@ -5,12 +5,13 @@ import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.View
 import android.widget.*
-import androidx.fragment.app.DialogFragment
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
+import kotlinx.android.synthetic.main.activity_menu_timer.*
 import java.util.*
 
 class TimerMenuActivity : AppCompatActivity() {
@@ -53,12 +54,25 @@ class TimerMenuActivity : AppCompatActivity() {
             val c = Calendar.getInstance()
             _startHour = c.get(Calendar.HOUR_OF_DAY)
             _startMinute = c.get(Calendar.MINUTE)
+            _endHour = c.get(Calendar.HOUR_OF_DAY)
+            _endMinute = c.get(Calendar.MINUTE)
             findViewById<Button>(R.id.bt_delete).visibility = View.INVISIBLE
         }
         //EndTimeの更新と描画
-        updateEndTime(_startHour, _startMinute, _alarmTime)
-        renderTime()
-        renderAlarmTime()
+        val btStartTime = findViewById<Button>(R.id.bt_start_time)
+        val btEndTime = findViewById<Button>(R.id.bt_end_time)
+        if(_startMinute < 10){
+            btStartTime.text = " ${_startHour} : 0${_startMinute} "
+        }
+        else{
+            btStartTime.text = " ${_startHour} : ${_startMinute} "
+        }
+        if(_endMinute < 10) {
+            btEndTime.text = " ${_endHour} : 0${_endMinute} "
+        }
+        else{
+            btEndTime.text = " ${_endHour} : ${_endMinute} "
+        }
         renderCount()
     }
 
@@ -69,111 +83,29 @@ class TimerMenuActivity : AppCompatActivity() {
 
     //ボタン設定
     //開始時間（時間）を変更
-    fun setStartTimeHour(view: View) {
-        val btStartHourButton = findViewById<Button>(R.id.bt_start_time_hour)
-        btStartHourButton.setOnClickListener {
-            val myedit = EditText(this)
-            myedit.inputType = InputType.TYPE_CLASS_NUMBER
-            myedit.maxLines = 1
-            val dialog = AlertDialog.Builder(this)
-            dialog.setTitle("開始時間（時間）")
-            dialog.setView(myedit)
-            dialog.setPositiveButton("OK", DialogInterface.OnClickListener { _, _ ->
-                val userText = myedit.getText().toString()
-                //値が0～23に収まっていたらセット
-                if (userText.toInt() in 0..23) {
-                    _startHour = userText.toInt()
-                    updateEndTime(_startHour, _startMinute, _alarmTime)
-                    renderTime()
-                }
-                //エラーのトーストを返す
-                else {
-                    Toast.makeText(applicationContext, "0から23の数字を入力してね！", Toast.LENGTH_LONG).show()
-                }
-            })
-            dialog.setNegativeButton("キャンセル", null)
-            dialog.show()
-        }
-
-//        btStartHourButton.setOnClickListener{
-//            val dialog = DialogFragment()
-//        }
-//        class TimePickerDialogFragment: DialogFragment(), TimePickerDialog.OnTimeSetListener{
-//
-//            override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-//                //デフォルト値を今の時間にする
-//                val c = Calendar.getInstance()
-//                val hour = c.get(Calendar.HOUR_OF_DAY)
-//                val minute = c.get(Calendar.MINUTE)
-//
-//                return TimePickerDialog(activity as TimerMenuActivity?, android.R.style.Theme_Holo_Dialog, this, hour, minute, DateFormat.is24HourFormat(activity))
-//            }
-//
-//            override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int){
-//                Log.e("a","${hourOfDay} : ${minute}")
-//            }
-//        }
+    fun setStartTime(view: View) {
+        val fragment = TimePickerDialogFragment()
+        val args = Bundle()
+        val startTimeText = this.bt_start_time.text.toString()
+        val startTimeArray = startTimeText.split(":")
+        args.putString("which", "start")
+        args.putInt("hour", startTimeArray[0].trim().toInt())
+        args.putInt("minute", startTimeArray[1].trim().toInt())
+        fragment.arguments = args
+        fragment.show(supportFragmentManager, "timePicker")
     }
 
     //終了時間を変更
-//    fun setEndTime(view: View){
-//    }
-
-    //開始時間（分）を変更
-    fun setStartTimeMinute(view: View){
-        val btStartMinuteButton = findViewById<Button>(R.id.bt_start_time_minute)
-        btStartMinuteButton.setOnClickListener {
-            val myedit = EditText(this)
-            myedit.inputType = InputType.TYPE_CLASS_NUMBER
-            myedit.maxLines = 1
-            val dialog = AlertDialog.Builder(this)
-            dialog.setTitle("開始時間（分）")
-            dialog.setView(myedit)
-            dialog.setPositiveButton("OK", DialogInterface.OnClickListener { _, _ ->
-                val userText = myedit.getText().toString()
-                //値が0～59に収まっていたらセット
-                if(userText.toInt() in 0..59){
-                    _startMinute = userText.toInt()
-                    updateEndTime(_startHour, _startMinute, _alarmTime)
-                    renderTime()
-                }
-                //エラーのトーストを返す
-                else{
-                    Toast.makeText(applicationContext, "0から59の数字を入力してね！", Toast.LENGTH_LONG).show()
-                }
-            })
-            dialog.setNegativeButton("キャンセル", null)
-            dialog.show()
-        }
-    }
-
-    //アラームを鳴らす時間を変更（5～180）
-    fun alarmTimeMinus20(view: View){
-        _alarmTime = kotlin.math.max(minAlarmTime, _alarmTime - 20)
-        updateEndTime(_startHour, _startMinute, _alarmTime)
-        renderTime()
-        renderAlarmTime()
-    }
-
-    fun alarmTimeMinus5(view: View){
-        _alarmTime = kotlin.math.max(minAlarmTime, _alarmTime - 5)
-        updateEndTime(_startHour, _startMinute, _alarmTime)
-        renderTime()
-        renderAlarmTime()
-    }
-
-    fun alarmTimePlus5(view: View){
-        _alarmTime = kotlin.math.min(maxAlarmTime, _alarmTime + 5)
-        updateEndTime(_startHour, _startMinute, _alarmTime)
-        renderTime()
-        renderAlarmTime()
-    }
-
-    fun alarmTimePlus20(view: View){
-        _alarmTime = kotlin.math.min(maxAlarmTime, _alarmTime + 20)
-        updateEndTime(_startHour, _startMinute, _alarmTime)
-        renderTime()
-        renderAlarmTime()
+    fun setEndTime(view: View){
+        val fragment = TimePickerDialogFragment()
+        val args = Bundle()
+        val endTimeText = this.bt_end_time.text.toString()
+        val endTimeArray = endTimeText.split(":")
+        args.putString("which", "end")
+        args.putInt("hour", endTimeArray[0].trim().toInt())
+        args.putInt("minute", endTimeArray[1].trim().toInt())
+        fragment.arguments = args
+        fragment.show(supportFragmentManager, "timePicker")
     }
 
     //アラームの回数を変更（1～30）
@@ -200,49 +132,64 @@ class TimerMenuActivity : AppCompatActivity() {
     //設定完了or設定中止をする場合
     //OKボタンをクリック
     fun onOKButtonClick(view: View){
+        //ボタンテキストから時間を取得、パラメータを更新
+        val startTimeText = this.bt_start_time.text.toString()
+        val endTimeText = this.bt_end_time.text.toString()
+        val startTimeArray = startTimeText.split(":")
+        val endTimeArray = endTimeText.split(":")
+        _startHour = startTimeArray[0].trim().toInt()
+        _startMinute = startTimeArray[1].trim().toInt()
+        _endHour = endTimeArray[0].trim().toInt()
+        _endMinute = endTimeArray[1].trim().toInt()
+
         //1分あたり1アラームのため、カウントが（終了時間ー開始時間）よりも大きかったら小さくする
         val start = _startHour * 60 + _startMinute
         val end = _endHour * 60 + _endMinute
-        if(end - start + 2 < _count){
-            //日をまたがない場合
-            if(start < end) _count = end - start + 2
-            //日をまたぐ場合
+        val delta = if(end - start < 0) end - start + 24 * 60 else end - start
+        _alarmTime = delta
+        if(delta + 1 <= _count){
+            _count = delta + 1
         }
 
-        val alarmDataId = intent.getLongExtra("id", 0L)
-        when(alarmDataId){
-            0L -> {
-                //データベースにアラームのデータを追加
-                realm.executeTransaction {
-                    val maxId = realm.where<AlarmData>().max("id")
-                    val nextId = (maxId?.toLong() ?: 0L) + 1L
-                    val alarmData = realm.createObject<AlarmData>(nextId)
-                    alarmData.startHour = _startHour
-                    alarmData.startMinute = _startMinute
-                    alarmData.endHour = _endHour
-                    alarmData.endMinute = _endMinute
-                    alarmData.alarmTime = _alarmTime
-                    alarmData.count = _count
-                    alarmData.bool = true
+        if(delta <= 180) {
+            val alarmDataId = intent.getLongExtra("id", 0L)
+            when (alarmDataId) {
+                0L -> {
+                    //データベースにアラームのデータを追加
+                    realm.executeTransaction {
+                        val maxId = realm.where<AlarmData>().max("id")
+                        val nextId = (maxId?.toLong() ?: 0L) + 1L
+                        val alarmData = realm.createObject<AlarmData>(nextId)
+                        alarmData.startHour = _startHour
+                        alarmData.startMinute = _startMinute
+                        alarmData.endHour = _endHour
+                        alarmData.endMinute = _endMinute
+                        alarmData.alarmTime = _alarmTime
+                        alarmData.count = _count
+                        alarmData.bool = true
+                    }
+                }
+                else -> {
+                    //データベースのアラームのデータを編集
+                    realm.executeTransaction {
+                        val alarmData = realm.where<AlarmData>().equalTo("id", alarmDataId).findFirst()
+                        alarmData?.startHour = _startHour
+                        alarmData?.startMinute = _startMinute
+                        alarmData?.endHour = _endHour
+                        alarmData?.endMinute = _endMinute
+                        alarmData?.alarmTime = _alarmTime
+                        alarmData?.count = _count
+                        alarmData?.bool = true
+                    }
                 }
             }
-            else -> {
-                //データベースのアラームのデータを編集
-                realm.executeTransaction {
-                    val alarmData = realm.where<AlarmData>().equalTo("id", alarmDataId).findFirst()
-                    alarmData?.startHour = _startHour
-                    alarmData?.startMinute = _startMinute
-                    alarmData?.endHour = _endHour
-                    alarmData?.endMinute = _endMinute
-                    alarmData?.alarmTime = _alarmTime
-                    alarmData?.count = _count
-                    alarmData?.bool = true
-                }
-            }
+            //トーストの表示
+            Toast.makeText(applicationContext, R.string.tv_alarm_set, Toast.LENGTH_LONG).show()
+            finish()
         }
-        //トーストの表示
-        Toast.makeText(applicationContext, R.string.tv_alarm_set, Toast.LENGTH_LONG).show()
-        finish()
+        else{
+            Toast.makeText(applicationContext, R.string.tv_set_error, Toast.LENGTH_LONG).show()
+        }
     }
 
     //キャンセルボタンをクリック
@@ -267,59 +214,8 @@ class TimerMenuActivity : AppCompatActivity() {
         finish()
     }
 
-    //相対的に開始時間を変更する
-    private fun updateStartTime(endHour: Int, endMinute: Int, alarmTime: Int): Unit {
-    }
-
-    //相対的に終了時間を変更する
-    private fun updateEndTime(startHour: Int, startMinute: Int, alarmTime: Int): Unit{
-        if(startMinute + alarmTime > 59){
-            val adv = (startMinute + alarmTime) / 60
-            _endHour = startHour + adv
-            _endMinute = startMinute + alarmTime - 60 * adv
-            if(_endHour > 23)_endHour -= 24
-        }
-        else{
-            _endHour = startHour
-            _endMinute = startMinute + alarmTime
-        }
-    }
-
-    //レンダリング
-    private fun renderTime(): Unit {
-        val btStartButtonHour = findViewById<Button>(R.id.bt_start_time_hour)
-        val btStartButtonMinute = findViewById<Button>(R.id.bt_start_time_minute)
-        val tvEndHour = findViewById<TextView>(R.id.tv_end_hour)
-        val tvEndMinute = findViewById<TextView>(R.id.tv_end_minute)
-        btStartButtonHour.text = _startHour.toString()
-        tvEndHour.text = _endHour.toString()
-        if (_startMinute < 10) {
-            btStartButtonMinute.text = "0${_startMinute}"
-        } else {
-            btStartButtonMinute.text = _startMinute.toString()
-        }
-        if (_endMinute < 10) {
-            tvEndMinute.text = "0${_endMinute}"
-        } else {
-            tvEndMinute.text = _endMinute.toString()
-        }
-    }
-
-    private fun renderAlarmTime(): Unit{
-        val tvAlarmTime = findViewById<TextView>(R.id.tv_alarm_time)
-        tvAlarmTime.text = _alarmTime.toString()
-    }
-
     private fun renderCount(): Unit{
         val tvCount = findViewById<TextView>(R.id.tv_alarm_count)
         tvCount.text = _count.toString()
-    }
-
-    //時間が日をまたいでいるか判定
-    private fun isDayChange(startHour: Int, startMinute: Int, endHour: Int, endMinute: Int): Boolean{
-        val start = startHour * 60 + startMinute
-        val end = endHour * 60 + endMinute
-        if(start > end) return true
-        return false
     }
 }

@@ -15,10 +15,6 @@
     <string name="tv_tilde">～</string>
     <string name="tv_minute">分</string>
     <string name="tv_count">回</string>
-    <string name="bt_time_minus20">-20</string>
-    <string name="bt_time_minus5">-5</string>
-    <string name="bt_time_plus5">+5</string>
-    <string name="bt_time_plus20">+20</string>
     <string name="bt_count_minus3">-3</string>
     <string name="bt_count_minus1">-1</string>
     <string name="bt_count_plus1">+1</string>
@@ -29,6 +25,7 @@
     <string name="tv_alarm_set">アラームを設定したよ！</string>
     <string name="tv_cancel">キャンセルしたよ！</string>
     <string name="tv_alarm_delete">アラームを消去したよ！</string>
+    <string name="tv_set_error">時間差は3時間以下にしてね！</string>
 
     <string name="ct_delete">削除</string>
     <string name="bt_stop">STOP</string>
