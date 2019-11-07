@@ -15,7 +15,6 @@ import android.widget.Toast
 import io.realm.kotlin.where
 import java.util.*
 
-
 class MainActivity : AppCompatActivity() {
     private lateinit var realm: Realm
     private lateinit var adapter: CustomRecyclerViewAdapter
@@ -47,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         for(i in 0 until column.toInt()){
             val alarmData = realmResults[i]
             //アラームの設定がONならセット
-            if(true){
+            if(alarmData?.bool ?: false){
                 var startTime = ((alarmData?.startHour ?: 0) * 60 + (alarmData?.startMinute ?: 0)  - timeNow)
                 if (startTime<0) startTime += 24 * 60
                 var deltaTime :Double = alarmData?.alarmTime?.toDouble() ?: 0.0

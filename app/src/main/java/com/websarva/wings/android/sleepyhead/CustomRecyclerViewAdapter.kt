@@ -2,12 +2,17 @@ package com.websarva.wings.android.sleepyhead
 
 import android.content.Intent
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import io.realm.Realm
 import io.realm.RealmResults
+import io.realm.kotlin.where
 
 class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): RecyclerView.Adapter<ViewHolder>() {
+    private lateinit var realm: Realm
     private val rResults: RealmResults<AlarmData> = realmResults
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -23,21 +28,19 @@ class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): Recycler
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         //データベースをもとにRecyclerViewの生成
         val alarmData = rResults[position]
-        val adv: Int = (alarmData!!.startMinute + alarmData.alarmTime) / 60
-        val endHour: Int = if(alarmData.startHour + adv < 24)alarmData.startHour + adv else alarmData.startHour + adv - 24
-        val endMinute: Int = alarmData.startMinute + alarmData.alarmTime - adv * 60
-        if(alarmData.startMinute < 10) {
+        if(alarmData!!.startMinute < 10) {
             holder.startTimeText?.text = "${alarmData.startHour} : 0${alarmData.startMinute}"
         }
         else {
             holder.startTimeText?.text = "${alarmData.startHour} : ${alarmData.startMinute}"
         }
-        if(endMinute < 10) {
-            holder.endTimeText?.text = "${endHour} : 0${endMinute}"
+        if(alarmData.endMinute < 10) {
+            holder.endTimeText?.text = "${alarmData.endHour} : 0${alarmData.endMinute}"
         }
         else {
-            holder.endTimeText?.text = "${endHour} : ${endMinute}"
+            holder.endTimeText?.text = "${alarmData.endHour} : ${alarmData.endMinute}"
         }
+        holder.alarmSwitch?.isChecked = alarmData.bool
         holder.alarmCountText?.text = "${alarmData.count}"
         if(position % 2 == 0)holder.itemView.setBackgroundColor(Color.DKGRAY)
 
@@ -46,6 +49,15 @@ class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): Recycler
             val intent = Intent(it.context, TimerMenuActivity::class.java)
             intent.putExtra("id", alarmData.id)
             it.context.startActivity(intent)
+        }
+
+        //スイッチ切り替え、アラームをセットorリセット
+        holder.alarmSwitch?.setOnCheckedChangeListener{_, isChecked ->
+            realm = Realm.getDefaultInstance()
+            realm.executeTransaction{
+                alarmData.bool = isChecked
+            }
+            realm.close()
         }
     }
 }

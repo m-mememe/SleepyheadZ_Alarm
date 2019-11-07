@@ -20,7 +20,7 @@ class PlayMusicActivity: AppCompatActivity(){
             WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
         )
         startService(Intent(this, PlayMusicService::class.java))
-        Toast.makeText(this, "AlarmAwake", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, R.string.tv_alarm_awake, Toast.LENGTH_LONG).show()
     }
 
     override fun onDestroy() {

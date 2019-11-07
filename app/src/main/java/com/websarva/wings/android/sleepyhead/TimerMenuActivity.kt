@@ -19,7 +19,7 @@ class TimerMenuActivity : AppCompatActivity() {
     private val minAlarmTime = 5
     private val maxAlarmTime = 180
     private val minCount = 2
-    private val maxCount = 30
+    private val maxCount = 31
 
     //アラームのパラメータ
     private var _startHour = 0
@@ -41,10 +41,12 @@ class TimerMenuActivity : AppCompatActivity() {
         if (alarmDataId > 0L) {
             //idが1以上 = データが存在する場合（設定変更）
             val alarmData = realm.where<AlarmData>().equalTo("id", alarmDataId).findFirst()
-            _startHour = alarmData?.startHour!!.toInt()
-            _startMinute = alarmData.startMinute
-            _alarmTime = alarmData.alarmTime
-            _count = alarmData.count
+            _startHour = alarmData?.startHour ?: 0
+            _startMinute = alarmData?.startMinute ?: 0
+            _endHour = alarmData?.endHour ?: 0
+            _endMinute = alarmData?.endMinute ?: 0
+            _alarmTime = alarmData?.alarmTime ?: 20
+            _count = alarmData?.count ?: 5
             findViewById<Button>(R.id.bt_delete).visibility = View.VISIBLE
         } else {
             //時間の取得と初期時間設定（新規作成）
@@ -217,8 +219,11 @@ class TimerMenuActivity : AppCompatActivity() {
                     val alarmData = realm.createObject<AlarmData>(nextId)
                     alarmData.startHour = _startHour
                     alarmData.startMinute = _startMinute
+                    alarmData.endHour = _endHour
+                    alarmData.endMinute = _endMinute
                     alarmData.alarmTime = _alarmTime
                     alarmData.count = _count
+                    alarmData.bool = true
                 }
             }
             else -> {
@@ -227,8 +232,11 @@ class TimerMenuActivity : AppCompatActivity() {
                     val alarmData = realm.where<AlarmData>().equalTo("id", alarmDataId).findFirst()
                     alarmData?.startHour = _startHour
                     alarmData?.startMinute = _startMinute
+                    alarmData?.endHour = _endHour
+                    alarmData?.endMinute = _endMinute
                     alarmData?.alarmTime = _alarmTime
                     alarmData?.count = _count
+                    alarmData?.bool = true
                 }
             }
         }
@@ -257,6 +265,10 @@ class TimerMenuActivity : AppCompatActivity() {
         //トーストの表示
         Toast.makeText(applicationContext, R.string.tv_alarm_delete, Toast.LENGTH_LONG).show()
         finish()
+    }
+
+    //相対的に開始時間を変更する
+    private fun updateStartTime(endHour: Int, endMinute: Int, alarmTime: Int): Unit {
     }
 
     //相対的に終了時間を変更する
