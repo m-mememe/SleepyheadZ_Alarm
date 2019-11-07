@@ -41,16 +41,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         //アラームをセットする
-        val c = Calendar.getInstance()
-        val timeNow = c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE)
         for(i in 0 until column.toInt()){
             val alarmData = realmResults[i]
             //アラームの設定がONならセット
             if(alarmData?.bool ?: false){
-                var startTime = ((alarmData?.startHour ?: 0) * 60 + (alarmData?.startMinute ?: 0)  - timeNow)
-                if (startTime<0) startTime += 24 * 60
-                var deltaTime :Double = alarmData?.alarmTime?.toDouble() ?: 0.0
-                deltaTime /= ((alarmData?.count ?: 2) - 1)
+                val startDelta = getStartDelta(alarmData?.startHour, alarmData?.startMinute, alarmData?.alarmTime, alarmData?.count)
+                val startTime = startDelta.first
+                val deltaTime = startDelta.second
                 for(j in 0 until (alarmData?.count ?: 0)) {
                     val alarmId = "alarm:${alarmData?.id}.${j}"
                     val addTime  = kotlin.math.floor(startTime + j * deltaTime).toInt()
@@ -92,6 +89,18 @@ class MainActivity : AppCompatActivity() {
     fun onAddSnoozeClick(view: View){
         registerAlarm("snooze")
         Toast.makeText(this, R.string.tv_snooze, Toast.LENGTH_SHORT).show()
+    }
+
+    //アラームの開始時間と差分時間を求める
+    private fun getStartDelta(startHour: Int?, startMinute: Int?, alarmTime: Int?, count: Int?): Pair<Int, Double>{
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = System.currentTimeMillis()
+        val timeNow = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE)
+        var startTime = (startHour ?: 0) * 60 + (startMinute ?: 0) - timeNow
+        if (startTime < 0) startTime += 24 * 60
+        var deltaTime: Double = alarmTime?.toDouble() ?: 0.0
+        deltaTime /= (count ?: 0) - 1
+        return Pair(startTime, deltaTime)
     }
 
     //アラームのセット、時間のデフォルトは5分でスヌーズ用

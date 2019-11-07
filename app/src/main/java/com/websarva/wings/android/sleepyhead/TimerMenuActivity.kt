@@ -1,10 +1,12 @@
 package com.websarva.wings.android.sleepyhead
 
+import android.app.AlarmManager
 import android.app.AlertDialog
+import android.app.PendingIntent
 import android.content.DialogInterface
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.InputType
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -17,7 +19,6 @@ import java.util.*
 class TimerMenuActivity : AppCompatActivity() {
     private val tag = "AlarmParameter"
     private lateinit var realm: Realm
-    private val minAlarmTime = 5
     private val maxAlarmTime = 180
     private val minCount = 2
     private val maxCount = 31
@@ -151,7 +152,8 @@ class TimerMenuActivity : AppCompatActivity() {
             _count = delta + 1
         }
 
-        if(delta <= 180) {
+        //差が3時間以下ならアラームセット
+        if(delta <= maxAlarmTime) {
             val alarmDataId = intent.getLongExtra("id", 0L)
             when (alarmDataId) {
                 0L -> {
@@ -170,6 +172,11 @@ class TimerMenuActivity : AppCompatActivity() {
                     }
                 }
                 else -> {
+                    //アラームがセット済みならキャンセルをする
+                    for(i in 0 until _count) {
+                        val alarmId = "alarm:${alarmDataId}.${i}"
+                        unregisterAlarm(alarmId)
+                    }
                     //データベースのアラームのデータを編集
                     realm.executeTransaction {
                         val alarmData = realm.where<AlarmData>().equalTo("id", alarmDataId).findFirst()
@@ -183,6 +190,18 @@ class TimerMenuActivity : AppCompatActivity() {
                     }
                 }
             }
+
+            //アラームをセット
+            val startDelta = getStartDelta(_startHour, _startMinute, _alarmTime, _count)
+            val startTime = startDelta.first
+            val deltaTime = startDelta.second
+            val maxId = realm.where<AlarmData>().max("id")
+            for(i in 0 until _count) {
+                val addTime = kotlin.math.floor(startTime + i * deltaTime).toInt()
+                val alarmId = "alarm:${maxId}.${i}"
+                registerAlarm(alarmId, addTime)
+            }
+
             //トーストの表示
             Toast.makeText(applicationContext, R.string.tv_alarm_set, Toast.LENGTH_LONG).show()
             finish()
@@ -201,9 +220,14 @@ class TimerMenuActivity : AppCompatActivity() {
 
     //削除ボタンをクリック
     fun onDeleteButtonClick(view: View){
+        //アラームのキャンセル
+        val alarmDataId = intent.getLongExtra("id", 0L)
+        for(i in 0 until _count) {
+            val alarmId = "alarm:${alarmDataId}.${i}"
+            unregisterAlarm(alarmId)
+        }
         //データベースから削除
         realm.executeTransaction{
-            val alarmDataId = intent.getLongExtra("id", 0L)
             val alarmData = realm.where<AlarmData>()
                 .equalTo("id", alarmDataId)
                 ?.findFirst()
@@ -212,6 +236,41 @@ class TimerMenuActivity : AppCompatActivity() {
         //トーストの表示
         Toast.makeText(applicationContext, R.string.tv_alarm_delete, Toast.LENGTH_LONG).show()
         finish()
+    }
+
+    //アラームの開始時間と差分時間を求める
+    private fun getStartDelta(startHour: Int, startMinute: Int, alarmTime: Int, count: Int): Pair<Int, Double>{
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = System.currentTimeMillis()
+        val timeNow = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE)
+        var startTime = startHour * 60 + startMinute - timeNow
+        if (startTime < 0) startTime += 24 * 60
+        var deltaTime: Double = alarmTime.toDouble()
+        deltaTime /= count - 1
+        return Pair(startTime, deltaTime)
+    }
+
+    //アラームのセット、時間のデフォルトは5分でスヌーズ用
+    private fun registerAlarm(str: String, minute: Int=5){
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = System.currentTimeMillis()
+        calendar.add(Calendar.MINUTE, minute)
+
+        val intent = Intent(this, AlarmBroadcastReceiver::class.java)
+        intent.type = str
+        val pending = PendingIntent.getBroadcast(this,0,intent,0)
+        val am : AlarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        am.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pending)
+    }
+
+    //アラームのリセット
+    private fun unregisterAlarm(str: String){
+        val intent = Intent(this, AlarmBroadcastReceiver::class.java)
+        intent.type = str
+        val pending = PendingIntent.getBroadcast(this,0,intent,0)
+        val am : AlarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        pending.cancel()
+        am.cancel(pending)
     }
 
     private fun renderCount(): Unit{

@@ -67,7 +67,6 @@ class PlayMusicService : Service(), MediaPlayer.OnCompletionListener {
     private inner class PlayerCompletionListener: MediaPlayer.OnCompletionListener{
         override fun onCompletion(mp: MediaPlayer) {
             //自分自身を終了
-            stopSelf()
             mp.start()
         }
     }

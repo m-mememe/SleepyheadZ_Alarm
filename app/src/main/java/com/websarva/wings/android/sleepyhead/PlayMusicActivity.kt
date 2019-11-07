@@ -19,6 +19,8 @@ class PlayMusicActivity: AppCompatActivity(){
             WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
             WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
         )
+
+
         startService(Intent(this, PlayMusicService::class.java))
         Toast.makeText(this, R.string.tv_alarm_awake, Toast.LENGTH_LONG).show()
     }
