@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import android.view.WindowManager
+import android.widget.TextView
 import android.widget.Toast
+import java.util.*
 
 class PlayMusicActivity: AppCompatActivity(){
 
@@ -19,6 +21,14 @@ class PlayMusicActivity: AppCompatActivity(){
             WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
         )
 
+        val calendar = Calendar.getInstance()
+        val AlarmTime = findViewById<TextView>(R.id.AlarmTime)
+        if(calendar.get(Calendar.MINUTE) < 10) {
+            AlarmTime.text = "${calendar.get(Calendar.HOUR)} : 0${calendar.get(Calendar.MINUTE)}"
+        }
+        else{
+            AlarmTime.text = "${calendar.get(Calendar.HOUR)} : ${calendar.get(Calendar.MINUTE)}"
+        }
         startService(Intent(this, PlayMusicService::class.java))
         Toast.makeText(this, R.string.tv_alarm_awake, Toast.LENGTH_LONG).show()
     }

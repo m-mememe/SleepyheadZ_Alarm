@@ -9,7 +9,7 @@
     <Button
         android:id="@+id/btAddAlarm"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="70dp"
         android:onClick="onAddAlarmClick"
         android:text="@string/bt_add_alarm"
         android:textSize="24sp"
