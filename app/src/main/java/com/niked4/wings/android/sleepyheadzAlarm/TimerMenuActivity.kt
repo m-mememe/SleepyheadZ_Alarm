@@ -84,11 +84,17 @@ class TimerMenuActivity : AppCompatActivity() {
     fun setStartTime(view: View) {
         val fragment = TimePickerDialogFragment()
         val args = Bundle()
+        val connectSwitch = this.sw_connect.isChecked
         val startTimeText = this.bt_start_time.text.toString()
+        val endTimeText = this.bt_end_time.text.toString()
         val startTimeArray = startTimeText.split(":")
+        val endTimeArray = endTimeText.split(":")
         args.putString("which", "start")
-        args.putInt("hour", startTimeArray[0].trim().toInt())
-        args.putInt("minute", startTimeArray[1].trim().toInt())
+        args.putBoolean("connect", connectSwitch)
+        args.putInt("startHour", startTimeArray[0].trim().toInt())
+        args.putInt("startMinute", startTimeArray[1].trim().toInt())
+        args.putInt("endHour", endTimeArray[0].trim().toInt())
+        args.putInt("endMinute", endTimeArray[1].trim().toInt())
         fragment.arguments = args
         fragment.show(supportFragmentManager, "timePicker")
     }
@@ -97,11 +103,17 @@ class TimerMenuActivity : AppCompatActivity() {
     fun setEndTime(view: View){
         val fragment = TimePickerDialogFragment()
         val args = Bundle()
+        val connectSwitch = this.sw_connect.isChecked
+        val startTimeText = this.bt_start_time.text.toString()
         val endTimeText = this.bt_end_time.text.toString()
+        val startTimeArray = startTimeText.split(":")
         val endTimeArray = endTimeText.split(":")
         args.putString("which", "end")
-        args.putInt("hour", endTimeArray[0].trim().toInt())
-        args.putInt("minute", endTimeArray[1].trim().toInt())
+        args.putBoolean("connect", connectSwitch)
+        args.putInt("startHour", startTimeArray[0].trim().toInt())
+        args.putInt("startMinute", startTimeArray[1].trim().toInt())
+        args.putInt("endHour", endTimeArray[0].trim().toInt())
+        args.putInt("endMinute", endTimeArray[1].trim().toInt())
         fragment.arguments = args
         fragment.show(supportFragmentManager, "timePicker")
     }

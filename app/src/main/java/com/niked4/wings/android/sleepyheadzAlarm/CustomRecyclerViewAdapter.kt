@@ -48,11 +48,19 @@ class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): Recycler
             it.context.startActivity(intent)
         }
 
-        //スイッチ切り替え、アラームをセットorリセット
+        //スイッチ切り替え
         holder.alarmSwitch?.setOnCheckedChangeListener{_, isChecked ->
             realm = Realm.getDefaultInstance()
             realm.executeTransaction{
                 alarmData.bool = isChecked
+            }
+            //アラームのセットorリセット
+            if(isChecked){
+                //セット
+            }
+            else{
+                //リセット
+
             }
             realm.close()
         }
