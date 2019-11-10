@@ -28,6 +28,9 @@ class TimerMenuActivity : AppCompatActivity() {
     private var _alarmTime = 20
     private var _count = 5
 
+    //アラーム新規作成時の一回目の時間変更のみconnectをONにするためのフラグ
+    private var first_flag = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu_timer)
@@ -37,6 +40,7 @@ class TimerMenuActivity : AppCompatActivity() {
 
         //アラームの新規作成か設定変更かで初期値を変更する
         val alarmDataId = intent.getLongExtra("id", 0L)
+        findViewById<Switch>(R.id.sw_connect).isChecked = true
         if (alarmDataId > 0L) {
             //idが1以上 = データが存在する場合（設定変更）
             val alarmData = realm.where<AlarmData>().equalTo("id", alarmDataId).findFirst()
@@ -55,6 +59,7 @@ class TimerMenuActivity : AppCompatActivity() {
             _endHour = c.get(Calendar.HOUR_OF_DAY)
             _endMinute = c.get(Calendar.MINUTE)
             findViewById<Button>(R.id.bt_delete).visibility = View.INVISIBLE
+            first_flag = true
         }
         //EndTimeの更新と描画
         val btStartTime = findViewById<Button>(R.id.bt_start_time)
@@ -97,6 +102,12 @@ class TimerMenuActivity : AppCompatActivity() {
         args.putInt("endMinute", endTimeArray[1].trim().toInt())
         fragment.arguments = args
         fragment.show(supportFragmentManager, "timePicker")
+
+        //アラーム新規作成時で初回時間変更後にconnectをOFFにする
+        if(first_flag){
+            findViewById<Switch>(R.id.sw_connect).isChecked = false
+            first_flag = false
+        }
     }
 
     //終了時間を変更
@@ -116,6 +127,12 @@ class TimerMenuActivity : AppCompatActivity() {
         args.putInt("endMinute", endTimeArray[1].trim().toInt())
         fragment.arguments = args
         fragment.show(supportFragmentManager, "timePicker")
+
+        //アラーム新規作成時で初回時間変更後にconnectをOFFにする
+        if(first_flag){
+            findViewById<Switch>(R.id.sw_connect).isChecked = false
+            first_flag = false
+        }
     }
 
     //アラームの回数を変更（1～30）
