@@ -23,7 +23,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         //Realm（データベース）のインスタンス取得
         realm = Realm.getDefaultInstance()
 
@@ -32,7 +31,6 @@ class MainActivity : AppCompatActivity() {
             .findAll()
             .sort("id", Sort.ASCENDING)
         val column = realm.where<AlarmData>().count()
-
         for(i in 0 until column.toInt()){
             val alarmData = realmResults[i]
             unregisterAlarmData(this, alarmData)
@@ -41,7 +39,6 @@ class MainActivity : AppCompatActivity() {
         //アラームをセットする
         for(i in 0 until column.toInt()){
             val alarmData = realmResults[i]
-            //アラームの設定がONならセット
             if(alarmData?.bool ?: false){
                 registerAlarmData(this, alarmData)
             }
@@ -135,6 +132,17 @@ class MainActivity : AppCompatActivity() {
         for(j in 0 until (alarmData?.count ?: 0)) {
             val alarmId = "alarm:${alarmData?.id}.${j}"
             unregisterAlarm(context, alarmId)
+        }
+    }
+
+    //alarmDataIdのデータをデータベースから消す
+    fun deleteAlarmData(realm: Realm, alarmData: AlarmData?){
+        val alarmDataId = alarmData?.id
+        realm.executeTransaction{
+            val alarmData = realm.where<AlarmData>()
+                .equalTo("id", alarmDataId)
+                ?.findFirst()
+                ?.deleteFromRealm()
         }
     }
 }

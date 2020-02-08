@@ -27,7 +27,7 @@ class TimerMenuActivity : AppCompatActivity() {
     private var _count = 5
 
     //アラーム新規作成時の一回目の時間変更のみconnectをONにするためのフラグ
-    private var first_flag = false
+    private var _firstFlag = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +58,7 @@ class TimerMenuActivity : AppCompatActivity() {
             _endHour = c.get(Calendar.HOUR_OF_DAY)
             _endMinute = c.get(Calendar.MINUTE)
             findViewById<Button>(R.id.bt_delete).visibility = View.INVISIBLE
-            first_flag = true
+            _firstFlag = true
         }
         //EndTimeの更新と描画
         val btStartTime = findViewById<Button>(R.id.bt_start_time)
@@ -103,9 +103,9 @@ class TimerMenuActivity : AppCompatActivity() {
         fragment.show(supportFragmentManager, "timePicker")
 
         //アラーム新規作成時で初回時間変更後にconnectをOFFにする
-        if(first_flag){
+        if(_firstFlag){
             findViewById<Switch>(R.id.sw_connect).isChecked = false
-            first_flag = false
+            _firstFlag = false
         }
     }
 
@@ -128,9 +128,9 @@ class TimerMenuActivity : AppCompatActivity() {
         fragment.show(supportFragmentManager, "timePicker")
 
         //アラーム新規作成時で初回時間変更後にconnectをOFFにする
-        if(first_flag){
+        if(_firstFlag){
             findViewById<Switch>(R.id.sw_connect).isChecked = false
-            first_flag = false
+            _firstFlag = false
         }
     }
 
@@ -217,7 +217,7 @@ class TimerMenuActivity : AppCompatActivity() {
             //アラームをセット
             val alarmData = realm.where<AlarmData>().equalTo("id", alarmDataId).findFirst()
             ma.registerAlarmData(this, alarmData)
-            //トーストの表示
+
             Toast.makeText(applicationContext, R.string.tv_alarm_set, Toast.LENGTH_LONG).show()
             finish()
         }
@@ -228,25 +228,18 @@ class TimerMenuActivity : AppCompatActivity() {
 
     //キャンセルボタンをクリック
     fun onBackButtonClick(view: View){
-        //トーストの表示
         Toast.makeText(applicationContext, R.string.tv_cancel, Toast.LENGTH_LONG).show()
         finish()
     }
 
     //削除ボタンをクリック
     fun onDeleteButtonClick(view: View){
-        //アラームのキャンセル
+        //アラームのキャンセルとデータベースからの削除
         val alarmDataId = intent.getLongExtra("id", 0L)
         val alarmData = realm.where<AlarmData>().equalTo("id", alarmDataId).findFirst()
         ma.unregisterAlarmData(this, alarmData)
-        //データベースから削除
-        realm.executeTransaction{
-            val alarmData = realm.where<AlarmData>()
-                .equalTo("id", alarmDataId)
-                ?.findFirst()
-                ?.deleteFromRealm()
-        }
-        //トーストの表示
+        ma.deleteAlarmData(realm, alarmData)
+
         Toast.makeText(applicationContext, R.string.tv_alarm_delete, Toast.LENGTH_LONG).show()
         finish()
     }
