@@ -14,7 +14,7 @@ class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): Recycler
     private val ma = MainActivity()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.alarm_setting, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.alarm_view, parent, false)
         val viewholder = ViewHolder(view)
         return viewholder
     }
