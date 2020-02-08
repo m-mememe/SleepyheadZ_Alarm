@@ -10,7 +10,9 @@ import io.realm.Realm
 import io.realm.Sort
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.Context
 import android.widget.Toast
+import io.realm.RealmQuery
 import io.realm.kotlin.where
 import java.util.*
 
@@ -31,12 +33,10 @@ class MainActivity : AppCompatActivity() {
             .findAll()
             .sort("id", Sort.ASCENDING)
         val column = realm.where<AlarmData>().count()
+
         for(i in 0 until column.toInt()){
             val alarmData = realmResults[i]
-            for(j in 0 until (alarmData?.count ?: 0)) {
-                val alarmId = "alarm:${alarmData?.id}.${j}"
-                unregisterAlarm(alarmId)
-            }
+            unUnregisterAlarmData(this, alarmData)
         }
 
         //アラームをセットする
@@ -44,14 +44,7 @@ class MainActivity : AppCompatActivity() {
             val alarmData = realmResults[i]
             //アラームの設定がONならセット
             if(alarmData?.bool ?: false){
-                val startDelta = getStartDelta(alarmData?.startHour, alarmData?.startMinute, alarmData?.alarmTime, alarmData?.count)
-                val startTime = startDelta.first
-                val deltaTime = startDelta.second
-                for(j in 0 until (alarmData?.count ?: 0)) {
-                    val alarmId = "alarm:${alarmData?.id}.${j}"
-                    val addTime  = kotlin.math.floor(startTime + j * deltaTime).toInt()
-                    registerAlarm(alarmId, addTime)
-                }
+                registerAlarmData(this, alarmData)
             }
         }
     }
@@ -86,7 +79,7 @@ class MainActivity : AppCompatActivity() {
 
     //5分タイマーのセットボタン
     fun onAddSnoozeClick(view: View){
-        registerAlarm("snooze")
+        registerAlarm(this, "snooze")
         Toast.makeText(this, R.string.tv_snooze, Toast.LENGTH_SHORT).show()
     }
 
@@ -104,25 +97,45 @@ class MainActivity : AppCompatActivity() {
     }
 
     //アラームのセット、時間のデフォルトは5分でスヌーズ用
-    private fun registerAlarm(str: String, minute: Int=5){
+    private fun registerAlarm(context: Context, str: String, minute: Int=5){
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
         calendar.add(Calendar.MINUTE, minute)
 
-        val intent = Intent(this, AlarmBroadcastReceiver::class.java)
+        val intent = Intent(context, AlarmBroadcastReceiver::class.java)
         intent.type = str
-        val pending = PendingIntent.getBroadcast(this,0,intent,0)
-        val am : AlarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        val pending = PendingIntent.getBroadcast(context,0,intent,0)
+        val am : AlarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
         am.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pending)
     }
 
     //アラームのリセット
-    private fun unregisterAlarm(str: String){
-        val intent = Intent(this, AlarmBroadcastReceiver::class.java)
+     private fun unregisterAlarm(context: Context, str: String){
+        val intent = Intent(context, AlarmBroadcastReceiver::class.java)
         intent.type = str
-        val pending = PendingIntent.getBroadcast(this,0,intent,0)
-        val am : AlarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        val pending = PendingIntent.getBroadcast(context,0,intent,0)
+        val am : AlarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
         pending.cancel()
         am.cancel(pending)
+    }
+
+    //alarmData単位でのセット
+    fun registerAlarmData(context: Context, alarmData: AlarmData?){
+        val startDelta = getStartDelta(alarmData?.startHour, alarmData?.startMinute, alarmData?.alarmTime, alarmData?.count)
+        val startTime = startDelta.first
+        val deltaTime = startDelta.second
+        for(j in 0 until (alarmData?.count ?: 0)) {
+            val alarmId = "alarm:${alarmData?.id}.${j}"
+            val addTime  = kotlin.math.floor(startTime + j * deltaTime).toInt()
+            registerAlarm(context, alarmId, addTime)
+        }
+    }
+
+    //alarmData単位でのリセット
+    fun unUnregisterAlarmData(context: Context, alarmData: AlarmData?){
+        for(j in 0 until (alarmData?.count ?: 0)) {
+            val alarmId = "alarm:${alarmData?.id}.${j}"
+            unregisterAlarm(context, alarmId)
+        }
     }
 }

@@ -11,6 +11,7 @@ import io.realm.RealmResults
 class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): RecyclerView.Adapter<ViewHolder>() {
     private lateinit var realm: Realm
     private val rResults: RealmResults<AlarmData> = realmResults
+    private val ma = MainActivity()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.alarm_setting, parent, false)
@@ -54,13 +55,14 @@ class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): Recycler
             realm.executeTransaction{
                 alarmData.bool = isChecked
             }
+            val context = holder.itemView.context
             //アラームのセットorリセット
             if(isChecked){
                 //セット
-            }
-            else{
+                ma.registerAlarmData(context, alarmData)
+            }else{
                 //リセット
-
+                ma.unUnregisterAlarmData(context, alarmData)
             }
             realm.close()
         }
