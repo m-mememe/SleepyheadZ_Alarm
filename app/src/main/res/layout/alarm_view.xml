@@ -44,30 +44,18 @@
         android:id="@+id/tv_end_time_para"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="48dp"
-        android:layout_marginRight="48dp"
         android:text="@string/tv_default_time"
         android:textSize="36sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/tv_alarm_count_para"
+        app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/tv_start_time_para" />
 
     <TextView
         android:id="@+id/tv_alarm_count_para"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
         android:text="0"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_end_time_para"
-        app:layout_constraintEnd_toStartOf="@+id/tv_count" />
-
-    <TextView
-        android:id="@+id/tv_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:text="@string/tv_count"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_end_time_para"
         app:layout_constraintEnd_toEndOf="parent" />

@@ -12,7 +12,6 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.widget.Toast
-import io.realm.RealmQuery
 import io.realm.kotlin.where
 import java.util.*
 
@@ -36,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
         for(i in 0 until column.toInt()){
             val alarmData = realmResults[i]
-            unUnregisterAlarmData(this, alarmData)
+            unregisterAlarmData(this, alarmData)
         }
 
         //アラームをセットする
@@ -132,7 +131,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //alarmData単位でのリセット
-    fun unUnregisterAlarmData(context: Context, alarmData: AlarmData?){
+    fun unregisterAlarmData(context: Context, alarmData: AlarmData?){
         for(j in 0 until (alarmData?.count ?: 0)) {
             val alarmId = "alarm:${alarmData?.id}.${j}"
             unregisterAlarm(context, alarmId)

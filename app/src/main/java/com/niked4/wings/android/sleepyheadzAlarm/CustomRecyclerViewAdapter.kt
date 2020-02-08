@@ -62,7 +62,7 @@ class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): Recycler
                 ma.registerAlarmData(context, alarmData)
             }else{
                 //リセット
-                ma.unUnregisterAlarmData(context, alarmData)
+                ma.unregisterAlarmData(context, alarmData)
             }
             realm.close()
         }
