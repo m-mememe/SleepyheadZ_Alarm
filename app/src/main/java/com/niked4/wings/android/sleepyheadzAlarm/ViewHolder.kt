@@ -4,7 +4,7 @@ import android.view.View
 import android.widget.Switch
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.alarm_setting.view.*
+import kotlinx.android.synthetic.main.alarm_view.view.*
 
 class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
     var alarmSwitch: Switch? = null
