@@ -2,6 +2,7 @@ package com.niked4.wings.android.sleepyheadzAlarm
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import io.realm.Realm
@@ -32,6 +33,7 @@ class TimerMenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu_timer)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         //Realm（データベース）のインスタンス取得
         realm = Realm.getDefaultInstance()
@@ -81,6 +83,12 @@ class TimerMenuActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         realm.close()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == android.R.id.home)
+            finish()
+        return super.onOptionsItemSelected(item)
     }
 
     //ボタン設定

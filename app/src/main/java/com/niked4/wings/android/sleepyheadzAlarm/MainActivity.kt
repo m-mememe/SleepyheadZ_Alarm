@@ -11,6 +11,8 @@ import io.realm.Sort
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
+import android.util.Log
+import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -25,7 +27,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //Realm（データベース）のインスタンス取得
         realm = Realm.getDefaultInstance()
 
         //データベースを元にセットされていたアラームを全てキャンセル
@@ -37,7 +38,6 @@ class MainActivity : AppCompatActivity() {
             val alarmData = realmResults[i]
             unregisterAlarmData(this, alarmData)
         }
-
         //アラームをセットする
         for(i in 0 until column.toInt()){
             val alarmData = realmResults[i]

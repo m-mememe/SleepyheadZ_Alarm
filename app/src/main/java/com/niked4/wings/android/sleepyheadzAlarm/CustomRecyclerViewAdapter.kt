@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import io.realm.Realm
 import io.realm.RealmResults
@@ -65,6 +66,18 @@ class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): Recycler
                 ma.unregisterAlarmData(context, alarmData)
             }
             realm.close()
+        }
+
+        holder.itemView.setOnCreateContextMenuListener{menu, v, _ ->
+            realm = Realm.getDefaultInstance()
+            menu.add(R.string.bt_delete).setOnMenuItemClickListener {
+                Toast.makeText(v.context, position.toString(), Toast.LENGTH_LONG).show()
+                ma.unregisterAlarmData(v.context, alarmData)
+                ma.deleteAlarmData(realm, alarmData)
+                Toast.makeText(v.context, R.string.tv_alarm_delete, Toast.LENGTH_SHORT).show()
+                this.notifyDataSetChanged()
+                true
+            }
         }
     }
 }
