@@ -11,6 +11,8 @@ import io.realm.Sort
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import io.realm.kotlin.where
 import java.util.*
@@ -64,6 +66,22 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         realm.close()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.app_setting, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            //設定メニューに移動
+            R.id.appSettingOption -> {
+                val intent = Intent(this, SettingActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     //アラームの追加

@@ -3,23 +3,27 @@
     package="com.niked4.wings.android.sleepyheadzAlarm">
 
     <application
-        android:name="com.niked4.wings.android.sleepyheadzAlarm.CustomApplication"
+        android:name=".CustomApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <receiver android:name="com.niked4.wings.android.sleepyheadzAlarm.AlarmBroadcastReceiver"
-            android:process=":remote"/>
-        <service
-            android:name="com.niked4.wings.android.sleepyheadzAlarm.PlayMusicService"
-            android:enabled="true"
-            android:exported="false"></service>
+        <activity android:name=".SettingActivity"></activity>
 
-        <activity android:name="com.niked4.wings.android.sleepyheadzAlarm.TimerMenuActivity" />
-        <activity android:name="com.niked4.wings.android.sleepyheadzAlarm.PlayMusicActivity" />
-        <activity android:name="com.niked4.wings.android.sleepyheadzAlarm.MainActivity">
+        <receiver
+            android:name=".AlarmBroadcastReceiver"
+            android:process=":remote" />
+
+        <service
+            android:name=".PlayMusicService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <activity android:name=".TimerMenuActivity" />
+        <activity android:name=".PlayMusicActivity" />
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

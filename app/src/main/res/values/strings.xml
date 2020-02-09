@@ -26,4 +26,6 @@
 
     <string name="bt_stop">STOP</string>
     <string name="tv_alarm_awake">時間だよ！起きて！</string>
+
+    <string name="mn_setting">Setting</string>
 </resources>
