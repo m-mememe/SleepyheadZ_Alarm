@@ -2,6 +2,7 @@ package com.niked4.wings.android.sleepyheadzAlarm
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
@@ -187,7 +188,7 @@ class TimerMenuActivity : AppCompatActivity() {
 
         //差が3時間以下ならアラームセット
         if(delta <= maxAlarmTime) {
-            val alarmDataId = intent.getLongExtra("id", 0L)
+            var alarmDataId = intent.getLongExtra("id", 0L)
             when (alarmDataId) {
                 0L -> {
                     //データベースにアラームのデータを追加
@@ -202,10 +203,11 @@ class TimerMenuActivity : AppCompatActivity() {
                         alarmData.alarmTime = _alarmTime
                         alarmData.count = _count
                         alarmData.bool = true
+                        alarmDataId = nextId
                     }
                 }
                 else -> {
-                    //アラームがセット済みならキャンセルをする
+                    //アラームが作成済みならアラームのキャンセルをする
                     val alarmData = realm.where<AlarmData>().equalTo("id", alarmDataId).findFirst()
                     ma.unregisterAlarmData(this, alarmData)
                     //データベースのアラームのデータを編集

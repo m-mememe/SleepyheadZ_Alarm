@@ -1,180 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:text="@string/tv_start_time"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="@string/tv_start_time"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/bt_start_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/button_background_blue"
-        android:onClick="setStartTime"
-        android:text=" 0 : 00 "
-        android:textSize="50sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        <Button
+            android:id="@+id/bt_start_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/button_background_blue"
+            android:onClick="setStartTime"
+            android:text=" 0 : 00 "
+            android:textSize="50sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:text="@string/tv_end_time"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bt_start_time" />
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="@string/tv_end_time"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bt_start_time" />
 
-    <Button
-        android:id="@+id/bt_end_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/button_background_blue"
-        android:onClick="setEndTime"
-        android:text=" 0 : 00 "
-        android:textSize="50sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        <Button
+            android:id="@+id/bt_end_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/button_background_blue"
+            android:onClick="setEndTime"
+            android:text=" 0 : 00 "
+            android:textSize="50sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:text="@string/tv_alarm_count"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bt_end_time" />
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="@string/tv_alarm_count"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bt_end_time" />
 
-    <Button
-        android:id="@+id/bt_alarm_count_minus20"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:background="@drawable/button_background_blue"
-        android:onClick="alarmCountMinus3"
-        android:text="@string/bt_count_minus3"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_alarm_count"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        <Button
+            android:id="@+id/bt_alarm_count_minus20"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:background="@drawable/button_background_blue"
+            android:onClick="alarmCountMinus3"
+            android:text="@string/bt_count_minus3"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_alarm_count"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
-    <Button
-        android:id="@+id/bt_alarm_count_minus5"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:background="@drawable/button_background_blue"
-        android:onClick="alarmCountMinus1"
-        android:text="@string/bt_count_minus1"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/bt_alarm_count_minus20"
-        app:layout_constraintStart_toEndOf="@+id/bt_alarm_count_minus20" />
+        <Button
+            android:id="@+id/bt_alarm_count_minus5"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/button_background_blue"
+            android:onClick="alarmCountMinus1"
+            android:text="@string/bt_count_minus1"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@+id/bt_alarm_count_minus20"
+            app:layout_constraintStart_toEndOf="@+id/bt_alarm_count_minus20" />
 
-    <TextView
-        android:id="@+id/tv_alarm_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="0"
-        android:textSize="50sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        <TextView
+            android:id="@+id/tv_alarm_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="0"
+            android:textSize="50sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
-    <Button
-        android:id="@+id/bt_alarm_count_plus5"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/button_background_blue"
-        android:onClick="alarmCountPlus1"
-        android:text="@string/bt_count_plus1"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/bt_alarm_count_minus20"
-        app:layout_constraintEnd_toStartOf="@+id/bt_alarm_count_plus20" />
+        <Button
+            android:id="@+id/bt_alarm_count_plus5"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/button_background_blue"
+            android:onClick="alarmCountPlus1"
+            android:text="@string/bt_count_plus1"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@+id/bt_alarm_count_minus20"
+            app:layout_constraintEnd_toStartOf="@+id/bt_alarm_count_plus20" />
 
-    <Button
-        android:id="@+id/bt_alarm_count_plus20"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
-        android:background="@drawable/button_background_blue"
-        android:onClick="alarmCountPlus3"
-        android:text="@string/bt_count_plus3"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/bt_alarm_count_minus20"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <Button
+            android:id="@+id/bt_alarm_count_plus20"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="40dp"
+            android:background="@drawable/button_background_blue"
+            android:onClick="alarmCountPlus3"
+            android:text="@string/bt_count_plus3"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@+id/bt_alarm_count_minus20"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/bt_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:onClick="onBackButtonClick"
-        android:text="@string/bt_back"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/bt_OK"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_alarm_count" />
+        <Button
+            android:id="@+id/bt_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:onClick="onBackButtonClick"
+            android:text="@string/bt_back"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/bt_OK"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_alarm_count" />
 
-    <Button
-        android:id="@+id/bt_OK"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onOKButtonClick"
-        android:text="@string/bt_OK"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/bt_back"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/bt_back" />
+        <Button
+            android:id="@+id/bt_OK"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onOKButtonClick"
+            android:text="@string/bt_OK"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/bt_back"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/bt_back" />
 
-    <Button
-        android:id="@+id/bt_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
-        android:onClick="onDeleteButtonClick"
-        android:text="@string/bt_delete"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bt_OK" />
+        <Button
+            android:id="@+id/bt_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:onClick="onDeleteButtonClick"
+            android:text="@string/bt_delete"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bt_OK" />
 
-    <Switch
-        android:id="@+id/sw_connect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="connect"
-        app:layout_constraintBottom_toBottomOf="@+id/textView3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/bt_start_time"
-        app:layout_constraintTop_toBottomOf="@+id/bt_start_time" />
+        <Switch
+            android:id="@+id/sw_connect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="connect"
+            app:layout_constraintBottom_toBottomOf="@+id/textView3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/bt_start_time"
+            app:layout_constraintTop_toBottomOf="@+id/bt_start_time" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
