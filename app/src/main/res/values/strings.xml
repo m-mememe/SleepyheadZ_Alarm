@@ -3,6 +3,7 @@
     <string name="app_name">Sleepyhead\'Z alarm</string>
     <string name="bt_add_alarm">Add alarm</string>
     <string name="bt_add_snooze">SNOOZE</string>
+    <string name="bt_cancel_snooze">CANCEL SNOOZE</string>
     <string name="tv_snooze">5分後には起きようね！</string>
 
     <string name="tv_start_time">Start</string>
@@ -26,6 +27,10 @@
 
     <string name="bt_stop">STOP</string>
     <string name="tv_alarm_awake">時間だよ！起きて！</string>
+
+    <string name="np_dialog_title">Count</string>
+    <string name="np_dialog_ok">OK</string>
+    <string name="np_dialog_ng">キャンセル</string>
 
     <string name="mn_setting">Setting</string>
 </resources>

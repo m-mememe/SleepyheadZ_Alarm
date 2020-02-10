@@ -73,66 +73,6 @@
             app:layout_constraintTop_toBottomOf="@+id/bt_end_time" />
 
         <Button
-            android:id="@+id/bt_alarm_count_minus20"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:background="@drawable/button_background_blue"
-            android:onClick="alarmCountMinus3"
-            android:text="@string/bt_count_minus3"
-            android:textSize="30sp"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_alarm_count"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView8" />
-
-        <Button
-            android:id="@+id/bt_alarm_count_minus5"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/button_background_blue"
-            android:onClick="alarmCountMinus1"
-            android:text="@string/bt_count_minus1"
-            android:textSize="30sp"
-            app:layout_constraintBottom_toBottomOf="@+id/bt_alarm_count_minus20"
-            app:layout_constraintStart_toEndOf="@+id/bt_alarm_count_minus20" />
-
-        <TextView
-            android:id="@+id/tv_alarm_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="0"
-            android:textSize="50sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView8" />
-
-        <Button
-            android:id="@+id/bt_alarm_count_plus5"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/button_background_blue"
-            android:onClick="alarmCountPlus1"
-            android:text="@string/bt_count_plus1"
-            android:textSize="30sp"
-            app:layout_constraintBottom_toBottomOf="@+id/bt_alarm_count_minus20"
-            app:layout_constraintEnd_toStartOf="@+id/bt_alarm_count_plus20" />
-
-        <Button
-            android:id="@+id/bt_alarm_count_plus20"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="40dp"
-            android:background="@drawable/button_background_blue"
-            android:onClick="alarmCountPlus3"
-            android:text="@string/bt_count_plus3"
-            android:textSize="30sp"
-            app:layout_constraintBottom_toBottomOf="@+id/bt_alarm_count_minus20"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <Button
             android:id="@+id/bt_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -143,7 +83,7 @@
             app:layout_constraintEnd_toStartOf="@+id/bt_OK"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_alarm_count" />
+            app:layout_constraintTop_toBottomOf="@+id/bt_set_count" />
 
         <Button
             android:id="@+id/bt_OK"
@@ -180,6 +120,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/bt_start_time"
             app:layout_constraintTop_toBottomOf="@+id/bt_start_time" />
+
+        <Button
+            android:id="@+id/bt_set_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/button_background_blue"
+            android:onClick="setCountButton"
+            android:text="5"
+            android:textSize="50sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

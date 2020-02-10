@@ -66,6 +66,7 @@ class TimerMenuActivity : AppCompatActivity() {
         //EndTimeの更新と描画
         val btStartTime = findViewById<Button>(R.id.bt_start_time)
         val btEndTime = findViewById<Button>(R.id.bt_end_time)
+        val btSetCount = findViewById<Button>(R.id.bt_set_count)
         if(_startMinute < 10){
             btStartTime.text = " ${_startHour} : 0${_startMinute} "
         }
@@ -78,7 +79,7 @@ class TimerMenuActivity : AppCompatActivity() {
         else{
             btEndTime.text = " ${_endHour} : ${_endMinute} "
         }
-        renderCount()
+        btSetCount.text = _count.toString()
     }
 
     override fun onDestroy() {
@@ -143,25 +144,12 @@ class TimerMenuActivity : AppCompatActivity() {
         }
     }
 
-    //アラームの回数を変更（1～30）
-    fun alarmCountMinus3(view: View){
-        _count = kotlin.math.max(minCount, _count - 3)
-        renderCount()
-    }
-
-    fun alarmCountMinus1(view: View){
-        _count = kotlin.math.max(minCount, _count - 1)
-        renderCount()
-    }
-
-    fun alarmCountPlus1(view: View){
-        _count = kotlin.math.min(maxCount, _count + 1)
-        renderCount()
-    }
-
-    fun alarmCountPlus3(view: View){
-        _count = kotlin.math.min(maxCount, _count + 3)
-        renderCount()
+    fun setCountButton(view: View){
+        val fragment = NumberPickerDialogFragment()
+        val args = Bundle()
+        args.putInt("count", _count)
+        fragment.arguments = args
+        fragment.show(supportFragmentManager, "NumberPickerDialogFragment")
     }
 
     //設定完了or設定中止をする場合
@@ -172,16 +160,18 @@ class TimerMenuActivity : AppCompatActivity() {
         val endTimeText = this.bt_end_time.text.toString()
         val startTimeArray = startTimeText.split(":")
         val endTimeArray = endTimeText.split(":")
+        val countText = this.bt_set_count.text.toString()
         _startHour = startTimeArray[0].trim().toInt()
         _startMinute = startTimeArray[1].trim().toInt()
         _endHour = endTimeArray[0].trim().toInt()
         _endMinute = endTimeArray[1].trim().toInt()
+        _count = countText.toInt()
 
         //1分あたり1アラームのため、カウントが（終了時間ー開始時間）よりも大きかったら小さくする
         val start = _startHour * 60 + _startMinute
         val end = _endHour * 60 + _endMinute
         val delta = if(end - start < 0) end - start + 24 * 60 else end - start
-        _alarmTime = delta
+//        _alarmTime = delta
         if(delta + 1 <= _count){
             _count = delta + 1
         }
@@ -227,7 +217,6 @@ class TimerMenuActivity : AppCompatActivity() {
             //アラームをセット
             val alarmData = realm.where<AlarmData>().equalTo("id", alarmDataId).findFirst()
             ma.registerAlarmData(this, alarmData)
-
             Toast.makeText(applicationContext, R.string.tv_alarm_set, Toast.LENGTH_LONG).show()
             finish()
         }
@@ -249,13 +238,7 @@ class TimerMenuActivity : AppCompatActivity() {
         val alarmData = realm.where<AlarmData>().equalTo("id", alarmDataId).findFirst()
         ma.unregisterAlarmData(this, alarmData)
         ma.deleteAlarmData(realm, alarmData)
-
         Toast.makeText(applicationContext, R.string.tv_alarm_delete, Toast.LENGTH_LONG).show()
         finish()
-    }
-
-    private fun renderCount(): Unit{
-        val tvCount = findViewById<TextView>(R.id.tv_alarm_count)
-        tvCount.text = _count.toString()
     }
 }

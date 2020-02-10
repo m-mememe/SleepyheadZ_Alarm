@@ -71,7 +71,6 @@ class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): Recycler
         holder.itemView.setOnCreateContextMenuListener{menu, v, _ ->
             realm = Realm.getDefaultInstance()
             menu.add(R.string.bt_delete).setOnMenuItemClickListener {
-                Toast.makeText(v.context, position.toString(), Toast.LENGTH_LONG).show()
                 ma.unregisterAlarmData(v.context, alarmData)
                 ma.deleteAlarmData(realm, alarmData)
                 Toast.makeText(v.context, R.string.tv_alarm_delete, Toast.LENGTH_SHORT).show()
