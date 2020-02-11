@@ -13,11 +13,8 @@ import kotlinx.android.synthetic.main.activity_menu_timer.*
 import java.util.*
 
 class TimerMenuActivity : AppCompatActivity() {
-    private val tag = "AlarmParameter"
     private lateinit var realm: Realm
     private val maxAlarmTime = 180
-    private val minCount = 2
-    private val maxCount = 31
     private val ma = MainActivity()
 
     //アラームのパラメータ
@@ -67,18 +64,9 @@ class TimerMenuActivity : AppCompatActivity() {
         val btStartTime = findViewById<Button>(R.id.bt_start_time)
         val btEndTime = findViewById<Button>(R.id.bt_end_time)
         val btSetCount = findViewById<Button>(R.id.bt_set_count)
-        if(_startMinute < 10){
-            btStartTime.text = " ${_startHour} : 0${_startMinute} "
-        }
-        else{
-            btStartTime.text = " ${_startHour} : ${_startMinute} "
-        }
-        if(_endMinute < 10) {
-            btEndTime.text = " ${_endHour} : 0${_endMinute} "
-        }
-        else{
-            btEndTime.text = " ${_endHour} : ${_endMinute} "
-        }
+        val (startTime, endTime) = arrangeNumericString(_startHour, _startMinute, _endHour, _endMinute)
+        btStartTime.text = " $startTime "
+        btEndTime.text = " $endTime "
         btSetCount.text = _count.toString()
     }
 
@@ -240,5 +228,24 @@ class TimerMenuActivity : AppCompatActivity() {
         ma.deleteAlarmData(realm, alarmData)
         Toast.makeText(applicationContext, R.string.tv_alarm_delete, Toast.LENGTH_LONG).show()
         finish()
+    }
+
+    //見やすいように文字列を調節、半角スペース2つで数字1文字分
+    fun arrangeNumericString(startHour: Int, startMinute: Int, endHour: Int, endMinute: Int): Pair<String, String>{
+        var startTime = ""
+        var endTime = ""
+        if(startHour < 10)
+            startTime += "  "
+        startTime += "$startHour : "
+        if(startMinute < 10)
+            startTime += "0"
+        startTime += startMinute
+        if(endHour < 10)
+            endTime += "  "
+        endTime += "$endHour : "
+        if(endMinute < 10)
+            endTime += "0"
+        endTime += endMinute
+        return Pair(startTime, endTime)
     }
 }
