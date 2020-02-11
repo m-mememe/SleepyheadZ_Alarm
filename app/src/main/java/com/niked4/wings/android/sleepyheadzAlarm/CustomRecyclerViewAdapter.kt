@@ -13,6 +13,7 @@ class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): Recycler
     private lateinit var realm: Realm
     private val rResults: RealmResults<AlarmData> = realmResults
     private val ma = MainActivity()
+    private val tma = TimerMenuActivity()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.alarm_view, parent, false)
@@ -27,18 +28,11 @@ class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): Recycler
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         //データベースをもとにRecyclerViewの生成
         val alarmData = rResults[position]
-        if(alarmData!!.startMinute < 10) {
-            holder.startTimeText?.text = "${alarmData.startHour} : 0${alarmData.startMinute}"
-        }
-        else {
-            holder.startTimeText?.text = "${alarmData.startHour} : ${alarmData.startMinute}"
-        }
-        if(alarmData.endMinute < 10) {
-            holder.endTimeText?.text = "${alarmData.endHour} : 0${alarmData.endMinute}"
-        }
-        else {
-            holder.endTimeText?.text = "${alarmData.endHour} : ${alarmData.endMinute}"
-        }
+        val (startTime, endTime) = tma.arrangeNumericString(
+            alarmData!!.startHour, alarmData.startMinute, alarmData.endHour, alarmData.endMinute)
+
+        holder.startTimeText?.text = startTime
+        holder.endTimeText?.text = endTime
         holder.alarmSwitch?.isChecked = alarmData.bool
         holder.alarmCountText?.text = "${alarmData.count}"
         if(position % 2 == 0)holder.itemView.setBackgroundColor(Color.DKGRAY)
@@ -77,6 +71,7 @@ class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): Recycler
                 this.notifyDataSetChanged()
                 true
             }
+            realm.close()
         }
     }
 }

@@ -20,19 +20,20 @@ class TimePickerDialogFragment : DialogFragment(), TimePickerDialog.OnTimeSetLis
         val c = Calendar.getInstance()
         var hour = 0
         var minute = 0
+        this.activity?.title = which
         if(which == "start") {
             hour = arguments?.getInt("startHour") ?: c.get(Calendar.HOUR_OF_DAY)
             minute = arguments?.getInt("startMinute") ?: c.get(Calendar.MINUTE)
-            val subhour = arguments?.getInt("endHour") ?: c.get(Calendar.HOUR_OF_DAY)
-            val subminute = arguments?.getInt("endMinute") ?: c.get(Calendar.HOUR_OF_DAY)
-            alarmTime = (subhour * 60 + subminute - (hour * 60 + minute) + 24 * 60) % (24 * 60)
+            val subHour = arguments?.getInt("endHour") ?: c.get(Calendar.HOUR_OF_DAY)
+            val subMinute = arguments?.getInt("endMinute") ?: c.get(Calendar.HOUR_OF_DAY)
+            alarmTime = (subHour * 60 + subMinute - (hour * 60 + minute) + 24 * 60) % (24 * 60)
         }
         else if(which == "end") {
             hour = arguments?.getInt("endHour") ?: c.get(Calendar.HOUR_OF_DAY)
             minute = arguments?.getInt("endMinute") ?: c.get(Calendar.MINUTE)
-            val subhour = arguments?.getInt("startHour") ?: c.get(Calendar.HOUR_OF_DAY)
-            val subminute = arguments?.getInt("startMinute") ?: c.get(Calendar.HOUR_OF_DAY)
-            alarmTime = (hour * 60 + minute - (subhour * 60 + subminute) + 24 * 60) % (24 * 60)
+            val subHour = arguments?.getInt("startHour") ?: c.get(Calendar.HOUR_OF_DAY)
+            val subMinute = arguments?.getInt("startMinute") ?: c.get(Calendar.HOUR_OF_DAY)
+            alarmTime = (hour * 60 + minute - (subHour * 60 + subMinute) + 24 * 60) % (24 * 60)
         }
         return TimePickerDialog(activity as TimerMenuActivity?, android.R.style.Theme_Holo_Dialog, this, hour, minute, DateFormat.is24HourFormat(activity))
     }
@@ -44,40 +45,24 @@ class TimePickerDialogFragment : DialogFragment(), TimePickerDialog.OnTimeSetLis
         val connect = arguments?.getBoolean("connect")
         //start選択時
         if(which == "start") {
-            if (minute < 10) {
-                timerMenuActivity.bt_start_time.text = " ${hourOfDay} : 0${minute} "
-            } else {
-                timerMenuActivity.bt_start_time.text = " ${hourOfDay} : ${minute} "
-            }
+            val endHour = ((hourOfDay * 60 + minute + alarmTime) / 60) % 24
+            val endMinute = (hourOfDay * 60 + minute + alarmTime) % 60
+            val (startTime, endTime) = timerMenuActivity.arrangeNumericString(hourOfDay, minute, endHour, endMinute)
+            timerMenuActivity.bt_start_time.text = " $startTime "
             //コネクトスイッチがONだったらもう片方も修正
             if(connect == true){
-                val endHour = ((hourOfDay * 60 + minute + alarmTime) / 60) % 24
-                val endMinute = (hourOfDay * 60 + minute + alarmTime) % 60
-                if(endMinute < 10){
-                    timerMenuActivity.bt_end_time.text = " ${endHour} : 0${endMinute} "
-                }
-                else{
-                    timerMenuActivity.bt_end_time.text = " ${endHour} : ${endMinute} "
-                }
+                timerMenuActivity.bt_end_time.text = " $endTime "
             }
         }
         //end選択時
         else if(which == "end") {
-            if (minute < 10) {
-                timerMenuActivity.bt_end_time.text = " ${hourOfDay} : 0${minute} "
-            } else {
-                timerMenuActivity.bt_end_time.text = " ${hourOfDay} : ${minute} "
-            }
+            val startHour = ((hourOfDay * 60 + minute - alarmTime + 24 * 60) / 60) % 24
+            val startMinute = (hourOfDay * 60 + minute - alarmTime + 60) % 60
+            val (startTime, endTime) = timerMenuActivity.arrangeNumericString(startHour, startMinute, hourOfDay, minute)
+            timerMenuActivity.bt_end_time.text = " $endTime "
             //コネクトスイッチがONだったらもう片方も修正
             if(connect == true){
-                val startHour = ((hourOfDay * 60 + minute - alarmTime + 24 * 60) / 60) % 24
-                val startMinute = (hourOfDay * 60 + minute - alarmTime + 60) % 60
-                if(startMinute < 10){
-                    timerMenuActivity.bt_start_time.text = " ${startHour} : 0${startMinute} "
-                }
-                else{
-                    timerMenuActivity.bt_start_time.text = " ${startHour} : ${startMinute} "
-                }
+                timerMenuActivity.bt_start_time.text = " $startTime "
             }
         }
     }

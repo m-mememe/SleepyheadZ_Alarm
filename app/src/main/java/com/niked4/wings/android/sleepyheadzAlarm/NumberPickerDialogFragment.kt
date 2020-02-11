@@ -37,6 +37,8 @@ class NumberPickerDialogFragment : DialogFragment(){
         override fun onClick(dialog: DialogInterface?, which: Int) {
             when(which){
                 DialogInterface.BUTTON_POSITIVE ->{
+                    //TODO:numPicker?.value.toString()で返せるようにしたい
+                    //TODO:現状では初期状態が現在の値ではなく強制的に2になる、値を動かさないと0が代入されてしまう点が問題
 //                    val view = this@NumberPickerDialogFragment.view
 //                    val numPicker = view?.findViewById<NumberPicker>(R.id.np_count)
                     val btSetCount = activity?.findViewById<Button>(R.id.bt_set_count)
