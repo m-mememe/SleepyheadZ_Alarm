@@ -52,13 +52,10 @@ class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): Recycler
             }
             val context = holder.itemView.context
             //アラームのセットorリセット
-            if(isChecked){
-                //セット
+            if(isChecked)
                 ma.registerAlarmData(context, alarmData)
-            }else{
-                //リセット
+            else
                 ma.unregisterAlarmData(context, alarmData)
-            }
             realm.close()
         }
 

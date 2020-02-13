@@ -44,11 +44,12 @@
         android:id="@+id/tv_end_time_para"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:text="@string/tv_default_time"
         android:textSize="36sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/tv_start_time_para" />
+        app:layout_constraintBottom_toBottomOf="@+id/tv_start_time_para"
+        app:layout_constraintStart_toEndOf="@+id/tv_tilde" />
 
     <TextView
         android:id="@+id/tv_alarm_count_para"
@@ -65,10 +66,12 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text=" "
-        android:textSize="8sp"
+        android:textSize="0sp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_end_time_para" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_start_time_para" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,8 +32,6 @@ class TimerMenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu_timer)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        //Realm（データベース）のインスタンス取得
         realm = Realm.getDefaultInstance()
 
         //アラームの新規作成か設定変更かで初期値を変更する
@@ -230,10 +228,12 @@ class TimerMenuActivity : AppCompatActivity() {
         finish()
     }
 
+    //補助的な関数
     //見やすいように文字列を調節、半角スペース2つで数字1文字分
     fun arrangeNumericString(startHour: Int, startMinute: Int, endHour: Int, endMinute: Int): Pair<String, String>{
         var startTime = ""
         var endTime = ""
+
         if(startHour < 10)
             startTime += "  "
         startTime += "$startHour : "
@@ -246,6 +246,7 @@ class TimerMenuActivity : AppCompatActivity() {
         if(endMinute < 10)
             endTime += "0"
         endTime += endMinute
+
         return Pair(startTime, endTime)
     }
 }
