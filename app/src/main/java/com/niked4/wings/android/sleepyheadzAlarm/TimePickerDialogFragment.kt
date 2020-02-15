@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.text.format.DateFormat
 import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
+import kotlinx.android.synthetic.main.activity_alarming.*
 import kotlinx.android.synthetic.main.activity_menu_timer.*
 import java.util.*
 
@@ -20,7 +21,7 @@ class TimePickerDialogFragment : DialogFragment(), TimePickerDialog.OnTimeSetLis
         val c = Calendar.getInstance()
         var hour = 0
         var minute = 0
-        this.activity?.title = which
+        this
         if(which == "start") {
             hour = arguments?.getInt("startHour") ?: c.get(Calendar.HOUR_OF_DAY)
             minute = arguments?.getInt("startMinute") ?: c.get(Calendar.MINUTE)
@@ -35,7 +36,10 @@ class TimePickerDialogFragment : DialogFragment(), TimePickerDialog.OnTimeSetLis
             val subMinute = arguments?.getInt("startMinute") ?: c.get(Calendar.HOUR_OF_DAY)
             alarmTime = (hour * 60 + minute - (subHour * 60 + subMinute) + 24 * 60) % (24 * 60)
         }
-        return TimePickerDialog(activity as TimerMenuActivity?, android.R.style.Theme_Holo_Dialog, this, hour, minute, DateFormat.is24HourFormat(activity))
+        val tpd = TimePickerDialog(activity as TimerMenuActivity?,
+            android.R.style.Theme_Holo_Dialog, this, hour, minute, DateFormat.is24HourFormat(activity))
+        tpd.setTitle("$which time")
+        return tpd
     }
 
     override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int){

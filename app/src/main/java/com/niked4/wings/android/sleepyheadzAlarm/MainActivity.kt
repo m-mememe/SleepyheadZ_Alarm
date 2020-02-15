@@ -143,7 +143,7 @@ class MainActivity : AppCompatActivity() {
         val deltaTime = startDelta.second
         for(j in 0 until (alarmData?.count ?: 0)) {
             val alarmId = "alarm:${alarmData?.id}.${j}"
-            val addTime  = kotlin.math.floor(startTime + j * deltaTime).toInt()
+            val addTime  = kotlin.math.floor(startTime + j * deltaTime).toInt() % (24 * 60)
             registerAlarm(context, alarmId, addTime)
         }
     }

@@ -9,6 +9,7 @@ import android.widget.*
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
+import kotlinx.android.synthetic.main.activity_alarming.*
 import kotlinx.android.synthetic.main.activity_menu_timer.*
 import java.util.*
 
