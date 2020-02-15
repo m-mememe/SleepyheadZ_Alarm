@@ -2,6 +2,7 @@ package com.niked4.wings.android.sleepyheadzAlarm
 
 import android.content.Intent
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -35,7 +36,7 @@ class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): Recycler
         holder.endTimeText?.text = endTime
         holder.alarmSwitch?.isChecked = alarmData.bool
         holder.alarmCountText?.text = "${alarmData.count}"
-        if(position % 2 == 0)holder.itemView.setBackgroundColor(Color.DKGRAY)
+//        if(position % 2 == 0)holder.itemView.setBackgroundColor(Color.DKGRAY)
 
         //タップ時に設定メニューを表示
         holder.itemView.setOnClickListener{
@@ -65,7 +66,7 @@ class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): Recycler
                 ma.unregisterAlarmData(v.context, alarmData)
                 ma.deleteAlarmData(realm, alarmData)
                 Toast.makeText(v.context, R.string.tv_alarm_delete, Toast.LENGTH_SHORT).show()
-                this.notifyDataSetChanged()
+                notifyDataSetChanged()
                 true
             }
             realm.close()

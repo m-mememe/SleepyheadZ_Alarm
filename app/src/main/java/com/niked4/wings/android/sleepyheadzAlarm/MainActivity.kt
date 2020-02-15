@@ -16,6 +16,7 @@ import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.recyclerview.widget.DividerItemDecoration
 import io.realm.kotlin.where
 import java.util.*
 
@@ -41,8 +42,8 @@ class MainActivity : AppCompatActivity() {
         //アラームをセットする
         for(i in 0 until column.toInt()){
             val alarmData = realmResults[i]
-            if(alarmData?.bool ?: false){
-                registerAlarmData(this, alarmData)
+            alarmData?.let{
+                if(it.bool) registerAlarmData(this, it)
             }
         }
     }
@@ -58,9 +59,11 @@ class MainActivity : AppCompatActivity() {
             .sort("startHour", Sort.ASCENDING)
         layoutManager = LinearLayoutManager(this)
         val alarmList = findViewById<RecyclerView>(R.id.recyclerView)
+        val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         alarmList.layoutManager = layoutManager
         adapter = CustomRecyclerViewAdapter(realmResults)
         alarmList.adapter = this.adapter
+        alarmList.addItemDecoration(divider)
     }
 
     override fun onDestroy() {
@@ -93,7 +96,7 @@ class MainActivity : AppCompatActivity() {
 
     //5分タイマーのセットボタン
     fun onAddSnoozeClick(view: View){
-        registerAlarm(this, "snooze")
+        registerAlarm(this, "snooze", 5)
         Toast.makeText(this, R.string.tv_snooze, Toast.LENGTH_SHORT).show()
     }
 
@@ -110,8 +113,8 @@ class MainActivity : AppCompatActivity() {
         return Pair(startTime, deltaTime)
     }
 
-    //アラームのセット、時間のデフォルトは5分でスヌーズ用
-    private fun registerAlarm(context: Context, str: String, minute: Int=5){
+    //アラームのセット
+    private fun registerAlarm(context: Context, str: String, minute: Int){
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
         calendar.add(Calendar.MINUTE, minute)

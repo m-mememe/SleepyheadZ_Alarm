@@ -133,7 +133,8 @@ class TimerMenuActivity : AppCompatActivity() {
     fun setCountButton(view: View){
         val fragment = NumberPickerDialogFragment()
         val args = Bundle()
-        args.putInt("count", _count)
+        val btSetCount = findViewById<Button>(R.id.bt_set_count)
+        args.putInt("count", btSetCount.text.toString().toInt())
         fragment.arguments = args
         fragment.show(supportFragmentManager, "NumberPickerDialogFragment")
     }
@@ -157,7 +158,6 @@ class TimerMenuActivity : AppCompatActivity() {
         val start = _startHour * 60 + _startMinute
         val end = _endHour * 60 + _endMinute
         val delta = if(end - start < 0) end - start + 24 * 60 else end - start
-//        _alarmTime = delta
         if(delta + 1 <= _count){
             _count = delta + 1
         }

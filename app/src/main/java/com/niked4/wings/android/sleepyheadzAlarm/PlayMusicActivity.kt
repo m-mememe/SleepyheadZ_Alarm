@@ -1,13 +1,16 @@
 package com.niked4.wings.android.sleepyheadzAlarm
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStream
@@ -32,9 +35,9 @@ class PlayMusicActivity: AppCompatActivity(){
         val calendar = Calendar.getInstance()
         val alarmTime = findViewById<TextView>(R.id.AlarmTime)
         if(calendar.get(Calendar.MINUTE) < 10)
-            alarmTime.text = "${calendar.get(Calendar.HOUR)} : 0${calendar.get(Calendar.MINUTE)}"
+            alarmTime.text = " ${calendar.get(Calendar.HOUR)} : 0${calendar.get(Calendar.MINUTE)} "
         else
-            alarmTime.text = "${calendar.get(Calendar.HOUR)} : ${calendar.get(Calendar.MINUTE)}"
+            alarmTime.text = " ${calendar.get(Calendar.HOUR)} : ${calendar.get(Calendar.MINUTE)} "
         startService(Intent(this, PlayMusicService::class.java))
         Toast.makeText(this, R.string.tv_alarm_awake, Toast.LENGTH_LONG).show()
 
@@ -70,9 +73,24 @@ class PlayMusicActivity: AppCompatActivity(){
             val forecastNow = forecasts.getJSONObject(0)
             val weather = forecastNow.getString("telop")
             val tvTitle = findViewById<TextView>(R.id.tvTitle)
-            val tvWeather = findViewById<TextView>(R.id.tvWeather)
+            val ivWeather = findViewById<ImageView>(R.id.tvWeather)
+
+            //情報を画面に反映
             tvTitle.text = title
-            tvWeather.text = weather
+            when(weather){
+                //TODO:とりあえず画像を表示させている、要取り換え
+                "晴れ"     -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny))
+                "曇り"     -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.cloudy))
+                "雨"       -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.rainy))
+                "晴のち曇" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny))
+                "晴のち雨" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny))
+                "曇のち晴" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny))
+                "曇のち雨" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny))
+                "雨のち晴" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny))
+                "雨のち曇" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny))
+                "晴時々曇" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny))
+                "曇時々雨" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny))
+            }
         }
 
         private fun is2String(stream: InputStream): String{
