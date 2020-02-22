@@ -10,7 +10,7 @@ open class AlarmData : RealmObject(){
     var startMinute : Int = 0
     var endHour : Int = 0
     var endMinute : Int = 0
-    var alarmTime : Int = 0
     var count : Int = 0
+    var media : String = "default"
     var bool : Boolean = true
 }

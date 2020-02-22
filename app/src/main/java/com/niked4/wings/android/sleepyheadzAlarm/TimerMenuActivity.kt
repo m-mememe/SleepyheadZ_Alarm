@@ -1,21 +1,23 @@
 package com.niked4.wings.android.sleepyheadzAlarm
 
+import android.content.Intent
+import android.media.RingtoneManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.os.Parcelable
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
-import kotlinx.android.synthetic.main.activity_alarming.*
 import kotlinx.android.synthetic.main.activity_menu_timer.*
 import java.util.*
 
 class TimerMenuActivity : AppCompatActivity() {
     private lateinit var realm: Realm
     private val maxAlarmTime = 180
+    private val MEDIA_SELECT = 100
     private val ma = MainActivity()
 
     //アラームのパラメータ
@@ -23,8 +25,8 @@ class TimerMenuActivity : AppCompatActivity() {
     private var _startMinute = 0
     private var _endHour = 0
     private var _endMinute = 0
-    private var _alarmTime = 20
     private var _count = 5
+    private var _media = "default"
 
     //アラーム新規作成時の一回目の時間変更のみconnectをONにするためのフラグ
     private var _firstFlag = false
@@ -40,13 +42,13 @@ class TimerMenuActivity : AppCompatActivity() {
         findViewById<Switch>(R.id.sw_connect).isChecked = true
         if (alarmDataId > 0L) {
             //idが1以上 = データが存在する場合（設定変更）
-            val alarmData = realm.where<AlarmData>().equalTo("id", alarmDataId).findFirst()
-            _startHour = alarmData?.startHour ?: 0
-            _startMinute = alarmData?.startMinute ?: 0
-            _endHour = alarmData?.endHour ?: 0
-            _endMinute = alarmData?.endMinute ?: 0
-            _alarmTime = alarmData?.alarmTime ?: 20
-            _count = alarmData?.count ?: 5
+            val alarmData = realm.where<AlarmData>().equalTo("id", alarmDataId).findFirst()!!
+            _startHour = alarmData.startHour
+            _startMinute = alarmData.startMinute
+            _endHour = alarmData.endHour
+            _endMinute = alarmData.endMinute
+            _count = alarmData.count
+            _media = alarmData.media
             findViewById<Button>(R.id.bt_delete).visibility = View.VISIBLE
         } else {
             //時間の取得と初期時間設定（新規作成）
@@ -60,18 +62,36 @@ class TimerMenuActivity : AppCompatActivity() {
             _firstFlag = true
         }
         //EndTimeの更新と描画
+        val (startTime, endTime) = arrangeNumericString(_startHour, _startMinute, _endHour, _endMinute)
+        val mediaTitle = ma.uriString2Title(this, _media)
         val btStartTime = findViewById<Button>(R.id.bt_start_time)
         val btEndTime = findViewById<Button>(R.id.bt_end_time)
         val btSetCount = findViewById<Button>(R.id.bt_set_count)
-        val (startTime, endTime) = arrangeNumericString(_startHour, _startMinute, _endHour, _endMinute)
+        val btMedia = findViewById<Button>(R.id.bt_media)
         btStartTime.text = " $startTime "
         btEndTime.text = " $endTime "
         btSetCount.text = _count.toString()
+        btMedia.text = mediaTitle
     }
 
     override fun onDestroy() {
         super.onDestroy()
         realm.close()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        //再生するメディア取得時
+        if(requestCode == MEDIA_SELECT){
+            if(resultCode == -1){
+                val uri = data?.getParcelableExtra<Parcelable>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+                if(uri.toString() == "null")
+                    return
+                _media = uri.toString()
+                val mediaTitle = ma.uriString2Title(this, _media)
+                val btMedia = findViewById<Button>(R.id.bt_media)
+                btMedia.text = mediaTitle
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -140,6 +160,12 @@ class TimerMenuActivity : AppCompatActivity() {
         fragment.show(supportFragmentManager, "NumberPickerDialogFragment")
     }
 
+    fun selectMusicButton(view: View){
+        val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false)
+        startActivityForResult(intent, MEDIA_SELECT)
+    }
+
     //設定完了or設定中止をする場合
     //OKボタンをクリック
     fun onOKButtonClick(view: View){
@@ -154,6 +180,7 @@ class TimerMenuActivity : AppCompatActivity() {
         _endHour = endTimeArray[0].trim().toInt()
         _endMinute = endTimeArray[1].trim().toInt()
         _count = countText.toInt()
+//        _media = ""    表示しているデータから取得しないならこの文はいらない
 
         //1分あたり1アラームのため、カウントが（終了時間ー開始時間）よりも大きかったら小さくする
         val start = _startHour * 60 + _startMinute
@@ -177,8 +204,8 @@ class TimerMenuActivity : AppCompatActivity() {
                         alarmData.startMinute = _startMinute
                         alarmData.endHour = _endHour
                         alarmData.endMinute = _endMinute
-                        alarmData.alarmTime = _alarmTime
                         alarmData.count = _count
+                        alarmData.media = _media
                         alarmData.bool = true
                         alarmDataId = nextId
                     }
@@ -194,8 +221,8 @@ class TimerMenuActivity : AppCompatActivity() {
                         alarmData?.startMinute = _startMinute
                         alarmData?.endHour = _endHour
                         alarmData?.endMinute = _endMinute
-                        alarmData?.alarmTime = _alarmTime
                         alarmData?.count = _count
+                        alarmData?.media = _media
                         alarmData?.bool = true
                     }
                 }

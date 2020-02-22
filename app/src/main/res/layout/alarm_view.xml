@@ -10,23 +10,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:checked="false"
         android:theme="@style/CustomSwitch"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_start_time_para"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/tv_start_time_para" />
 
     <TextView
         android:id="@+id/tv_start_time_para"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         android:text="@string/tv_default_time"
         android:textSize="36sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/sw_on_off"
-        app:layout_constraintTop_toTopOf="@+id/sw_on_off" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_tilde"
@@ -71,5 +71,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_start_time_para" />
+
+    <TextView
+        android:id="@+id/tv_media"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="default"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_alarm_count_para"
+        app:layout_constraintEnd_toStartOf="@+id/tv_alarm_count_para" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

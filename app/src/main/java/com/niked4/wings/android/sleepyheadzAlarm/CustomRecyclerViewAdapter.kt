@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import io.realm.Realm
 import io.realm.RealmResults
+import kotlin.coroutines.coroutineContext
 
 class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): RecyclerView.Adapter<ViewHolder>() {
     private lateinit var realm: Realm
@@ -28,15 +29,17 @@ class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): Recycler
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         //データベースをもとにRecyclerViewの生成
-        val alarmData = rResults[position]
+        val alarmData = rResults[position]!!
         val (startTime, endTime) = tma.arrangeNumericString(
-            alarmData!!.startHour, alarmData.startMinute, alarmData.endHour, alarmData.endMinute)
+            alarmData.startHour, alarmData.startMinute, alarmData.endHour, alarmData.endMinute)
+        val context = holder.itemView.context
+        val mediaTitle = ma.uriString2Title(context, alarmData.media)
 
         holder.startTimeText?.text = startTime
         holder.endTimeText?.text = endTime
         holder.alarmSwitch?.isChecked = alarmData.bool
         holder.alarmCountText?.text = "${alarmData.count}"
-//        if(position % 2 == 0)holder.itemView.setBackgroundColor(Color.DKGRAY)
+        holder.alarmMedia?.text = mediaTitle
 
         //タップ時に設定メニューを表示
         holder.itemView.setOnClickListener{
@@ -51,7 +54,6 @@ class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): Recycler
             realm.executeTransaction{
                 alarmData.bool = isChecked
             }
-            val context = holder.itemView.context
             //アラームのセットorリセット
             if(isChecked)
                 ma.registerAlarmData(context, alarmData)
@@ -60,12 +62,13 @@ class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): Recycler
             realm.close()
         }
 
-        holder.itemView.setOnCreateContextMenuListener{menu, v, _ ->
+        //アラームのコンテキストメニュー
+        holder.itemView.setOnCreateContextMenuListener{menu, view, _ ->
             realm = Realm.getDefaultInstance()
             menu.add(R.string.bt_delete).setOnMenuItemClickListener {
-                ma.unregisterAlarmData(v.context, alarmData)
+                ma.unregisterAlarmData(view.context, alarmData)
                 ma.deleteAlarmData(realm, alarmData)
-                Toast.makeText(v.context, R.string.tv_alarm_delete, Toast.LENGTH_SHORT).show()
+                Toast.makeText(view.context, R.string.tv_alarm_delete, Toast.LENGTH_SHORT).show()
                 notifyDataSetChanged()
                 true
             }

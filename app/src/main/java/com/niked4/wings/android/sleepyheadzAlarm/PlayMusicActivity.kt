@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import android.view.WindowManager
@@ -31,14 +32,18 @@ class PlayMusicActivity: AppCompatActivity(){
             WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
         )
 
-        //現在時刻の表示と音楽の再生
+        //現在時刻の表示
         val calendar = Calendar.getInstance()
         val alarmTime = findViewById<TextView>(R.id.AlarmTime)
         if(calendar.get(Calendar.MINUTE) < 10)
             alarmTime.text = " ${calendar.get(Calendar.HOUR)} : 0${calendar.get(Calendar.MINUTE)} "
         else
             alarmTime.text = " ${calendar.get(Calendar.HOUR)} : ${calendar.get(Calendar.MINUTE)} "
-        startService(Intent(this, PlayMusicService::class.java))
+
+        //アラームの再生（サービス）
+        val intent = Intent(this, PlayMusicService::class.java)
+            .putExtra("media", intent.getStringExtra("media"))
+        startService(intent)
         Toast.makeText(this, R.string.tv_alarm_awake, Toast.LENGTH_LONG).show()
 
         //天気情報の取得

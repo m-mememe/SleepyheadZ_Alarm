@@ -9,14 +9,12 @@
     <string name="tv_start_time">Start</string>
     <string name="tv_end_time">End</string>
     <string name="tv_alarm_count">Count</string>
+    <string name="tv_alarm_media">Media</string>
+    <string name="tv_switch_connect">connect</string>
     <string name="tv_default_time">0:00</string>
     <string name="tv_colon">:</string>
     <string name="tv_tilde">～</string>
     <string name="tv_count">回</string>
-    <string name="bt_count_minus3">-3</string>
-    <string name="bt_count_minus1">-1</string>
-    <string name="bt_count_plus1">+1</string>
-    <string name="bt_count_plus3">+3</string>
     <string name="bt_OK">OK</string>
     <string name="bt_back">CANCEL</string>
     <string name="bt_delete">DELETE</string>
