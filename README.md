@@ -3,7 +3,7 @@
 どうしても朝起きれない人に向けたアラーム。  
 朝が苦手に人がよくやる複数のアラームをセットするのを一括管理できるようにする。  
 
-![キャプチャ](https://user-images.githubusercontent.com/51912962/75100678-4084c880-5614-11ea-89cb-ea8e589273e9.PNG)
+![キャプチャ](https://user-images.githubusercontent.com/51912962/75369722-51308980-5907-11ea-9b92-9b6c6a20798e.PNG)
 
 ## Overview
 
@@ -54,11 +54,3 @@ livedoorの天気APIを利用してアラーム鳴動時の天気表示
 ## Test environment
 - Nexus 5X API28 (AVD)
 - Xperia XZs API26 (Real machine)
-
-## ToDoList
-```  
-アイコンの作成・変更
-アニメーションの追加
-一様分布以外にアラームを設定できるようにする（そのためにデータベースに音楽の種類と分布の選択を追加する必要あり）
-Preferenceを使用して一般的な設定をカスタマイズ可能にする
-```
