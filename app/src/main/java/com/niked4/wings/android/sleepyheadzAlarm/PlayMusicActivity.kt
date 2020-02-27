@@ -2,6 +2,7 @@ package com.niked4.wings.android.sleepyheadzAlarm
 
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
@@ -19,6 +20,7 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
+import kotlin.math.min
 
 class PlayMusicActivity: AppCompatActivity(){
 
@@ -35,10 +37,12 @@ class PlayMusicActivity: AppCompatActivity(){
         //現在時刻の表示
         val calendar = Calendar.getInstance()
         val alarmTime = findViewById<TextView>(R.id.AlarmTime)
-        if(calendar.get(Calendar.MINUTE) < 10)
-            alarmTime.text = " ${calendar.get(Calendar.HOUR)} : 0${calendar.get(Calendar.MINUTE)} "
+        val minute = calendar.get(Calendar.MINUTE)
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        if(minute < 10)
+            alarmTime.text = " ${hour} : 0${minute} "
         else
-            alarmTime.text = " ${calendar.get(Calendar.HOUR)} : ${calendar.get(Calendar.MINUTE)} "
+            alarmTime.text = " ${hour} : ${minute} "
 
         //アラームの再生（サービス）
         val intent = Intent(this, PlayMusicService::class.java)
@@ -54,6 +58,10 @@ class PlayMusicActivity: AppCompatActivity(){
     override fun onDestroy() {
         stopService(Intent(this, PlayMusicService::class.java))
         super.onDestroy()
+    }
+
+    fun stopAlarm(view: View){
+        finish()
     }
 
     private inner class WeatherReceiver: AsyncTask<String, String, String>() {
@@ -77,24 +85,44 @@ class PlayMusicActivity: AppCompatActivity(){
             val forecasts = rootJSON.getJSONArray("forecasts")
             val forecastNow = forecasts.getJSONObject(0)
             val weather = forecastNow.getString("telop")
-            val tvTitle = findViewById<TextView>(R.id.tvTitle)
-            val ivWeather = findViewById<ImageView>(R.id.tvWeather)
+            val calendar = Calendar.getInstance()
+            val clPlayMusic = findViewById<ConstraintLayout>(R.id.cl_play_music)
+            val tvTitle = findViewById<TextView>(R.id.tv_title)
+            val ivWeather = findViewById<ImageView>(R.id.tv_weather)
 
             //情報を画面に反映
             tvTitle.text = title
             when(weather){
-                //TODO:とりあえず画像を表示させている、要取り換え
                 "晴れ"     -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny))
                 "曇り"     -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.cloudy))
                 "雨"       -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.rainy))
-                "晴のち曇" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny))
-                "晴のち雨" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny))
-                "曇のち晴" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny))
-                "曇のち雨" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny))
-                "雨のち晴" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny))
-                "雨のち曇" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny))
-                "晴時々曇" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny))
-                "曇時々雨" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny))
+                "晴のち曇" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny2cloudy))
+                "晴のち雨" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny2rainy))
+                "曇のち晴" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.cloudy2sunny))
+                "曇のち雨" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.cloudy2rainy))
+                "雨のち晴" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.rainy2sunny))
+                "雨のち曇" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.rainy2cloudy))
+                "晴時々曇" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny_or_cloudy))
+                "晴時々雨" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny_or_rainy))
+                "曇時々雨" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.cloudy_or_rainy))
+            }
+            if((weather == "晴れ") or (weather == "晴のち曇") or (weather == "晴時々曇")){
+                //昼の時
+                val hour = calendar.get(Calendar.HOUR_OF_DAY)
+                if((6 <= hour) and (hour <= 18)) {
+                    clPlayMusic.setBackgroundColor(Color.parseColor("#33aaff"))
+                }
+                //夜の時
+                else{
+                    Log.e("calendar", hour.toString())
+                    when(weather){
+                        "晴れ"     -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.moon))
+                        "晴のち曇" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.moon2cloudy))
+                        "晴のち雨" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.moon2rainy))
+                        "晴時々曇" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.moon_or_cloudy))
+                        "晴時々雨" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.moon_or_rainy))
+                    }
+                }
             }
         }
 
@@ -109,9 +137,5 @@ class PlayMusicActivity: AppCompatActivity(){
             reader.close()
             return sb.toString()
         }
-    }
-
-    fun stopAlarm(view: View){
-        finish()
     }
 }

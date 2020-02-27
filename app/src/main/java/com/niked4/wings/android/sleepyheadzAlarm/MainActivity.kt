@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         alarmList.layoutManager = layoutManager
         adapter = CustomRecyclerViewAdapter(realmResults)
-        alarmList.adapter = this.adapter
+        alarmList.adapter = adapter
         alarmList.addItemDecoration(divider)
     }
 

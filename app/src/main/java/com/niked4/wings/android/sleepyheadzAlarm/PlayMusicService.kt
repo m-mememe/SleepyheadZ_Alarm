@@ -48,12 +48,10 @@ class PlayMusicService : Service(), MediaPlayer.OnCompletionListener {
         val mediaFileUriStr =
             if(media == "default") "android.resource://${packageName}/${R.raw.bgm_maoudamashii_orchestra02}" else media
         val mediaFileUri = Uri.parse(mediaFileUriStr)
-        _am?.let {
-            val volume = it.getStreamMaxVolume(AudioManager.STREAM_ALARM)
-            it.setStreamVolume(AudioManager.STREAM_ALARM, volume, 0)
-        }
+        val volume = _am?.getStreamMaxVolume(AudioManager.STREAM_MUSIC)?.toFloat() ?: 5.0F
         try{
             //アラーム再生
+            _player?.setVolume(volume, volume)
             _player?.setDataSource(applicationContext, mediaFileUri)
             _player?.setOnPreparedListener(PlayerPreparedListener())
             _player?.setOnCompletionListener(PlayerCompletionListener())
