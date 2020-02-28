@@ -3,6 +3,7 @@ package com.niked4.wings.android.sleepyheadzAlarm
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
@@ -48,14 +49,18 @@ class PlayMusicService : Service(), MediaPlayer.OnCompletionListener {
         val mediaFileUriStr =
             if(media == "default") "android.resource://${packageName}/${R.raw.bgm_maoudamashii_orchestra02}" else media
         val mediaFileUri = Uri.parse(mediaFileUriStr)
-        val volume = _am?.getStreamMaxVolume(AudioManager.STREAM_MUSIC)?.toFloat() ?: 5.0F
         try{
             //アラーム再生
-            _player?.setVolume(volume, volume)
-            _player?.setDataSource(applicationContext, mediaFileUri)
-            _player?.setOnPreparedListener(PlayerPreparedListener())
-            _player?.setOnCompletionListener(PlayerCompletionListener())
-            _player?.prepareAsync()
+            _player?.let{
+                it.setAudioAttributes(AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_ALARM)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .build())
+                it.setDataSource(applicationContext, mediaFileUri)
+                it.setOnPreparedListener(PlayerPreparedListener())
+                it.setOnCompletionListener(PlayerCompletionListener())
+                it.prepareAsync()
+            }
         }
         catch (ex: IllegalArgumentException){
             Log.e("ServiceSample", "メディアプレーヤー準備時の例外発生")

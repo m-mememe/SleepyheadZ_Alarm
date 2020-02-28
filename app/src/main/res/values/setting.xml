@@ -3,5 +3,5 @@
     <integer name="setting_first_time_diff">20</integer>
     <integer name="setting_first_count">5</integer>
     <string name="setting_sort_key">startHour</string>
-    <string name="setting_living_area">Tokyo</string>
+    <string name="setting_living_area">tokyo</string>
 </resources>

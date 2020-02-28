@@ -187,7 +187,6 @@ class AlarmMenuActivity : AppCompatActivity() {
         _endHour = endTimeArray[0].trim().toInt()
         _endMinute = endTimeArray[1].trim().toInt()
         _count = countText.toInt()
-//        _media = ""    表示しているデータから取得しないならこの文はいらない
 
         //1分あたり1アラームのため、カウントが（終了時間ー開始時間）よりも大きかったら小さくする
         val start = _startHour * 60 + _startMinute
