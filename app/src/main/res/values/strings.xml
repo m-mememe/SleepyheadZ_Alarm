@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
+    <!-- MainActivity -->
     <string name="app_name">Sleepyhead\'Z alarm</string>
     <string name="bt_add_alarm">Add alarm</string>
     <string name="bt_add_snooze">SNOOZE</string>
     <string name="bt_cancel_snooze">CANCEL SNOOZE</string>
     <string name="tv_snooze">5分後には起きようね！</string>
 
+    <!-- TimerMenuActivity -->
     <string name="tv_start_time">Start</string>
     <string name="tv_end_time">End</string>
     <string name="tv_alarm_count">Count</string>
@@ -23,12 +25,23 @@
     <string name="tv_alarm_delete">アラームを消去したよ！</string>
     <string name="tv_set_error">時間差は3時間以下にしてね！</string>
 
+    <!-- PlayMusicActivity -->
     <string name="bt_stop">STOP</string>
     <string name="tv_alarm_awake">時間だよ！起きて！</string>
 
+    <!-- NumberPickerDialogFragment -->
     <string name="np_dialog_title">Count</string>
     <string name="np_dialog_ok">OK</string>
     <string name="np_dialog_ng">キャンセル</string>
 
+    <!-- SettingActivity -->
     <string name="mn_setting">Setting</string>
+    <string name="setting_first_time_diff_title">開始時間と終了時間の時間差</string>
+    <string name="setting_first_time_diff_summary">アラーム作成時の開始時間と終了時間の時間差を変更するよ</string>
+    <string name="setting_first_count_title">デフォルトカウント</string>
+    <string name="setting_first_count_summary">アラーム作成時の初期カウント数を変更するよ</string>
+    <string name="setting_sort_key_title">ソートキー</string>
+    <string name="setting_sort_key_summary">アラーム表示のソート方法を変更するよ</string>
+    <string name="setting_living_area_title">居住地</string>
+    <string name="setting_living_area_summary">天気予報の地域を変更するよ</string>
 </resources>

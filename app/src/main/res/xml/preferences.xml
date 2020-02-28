@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ListPreference
+        android:key="firstTimeDiff"
+        android:title="@string/setting_first_time_diff_title"
+        android:entries="@array/first_time_diff_values"
+        android:entryValues="@array/first_time_diff_values"
+        android:dialogTitle="@string/setting_first_time_diff_title"
+        android:defaultValue="@integer/setting_first_time_diff"
+        android:summary="@string/setting_first_time_diff_summary"
+        app:useSimpleSummaryProvider="true"/>
+
+    <ListPreference
+        android:key="firstCount"
+        android:title="@string/setting_first_count_title"
+        android:entries="@array/first_count_values"
+        android:entryValues="@array/first_count_values"
+        android:dialogTitle="@string/setting_first_count_title"
+        android:summary="@string/setting_first_count_summary"
+        android:defaultValue="@integer/setting_first_count"
+        app:useSimpleSummaryProvider="true"/>
+
+    <ListPreference
+        android:key="sortKey"
+        android:title="@string/setting_sort_key_title"
+        android:entries="@array/sort_key_labels"
+        android:entryValues="@array/sort_key_values"
+        android:dialogTitle="@string/setting_sort_key_title"
+        android:summary="@string/setting_sort_key_summary"
+        android:defaultValue="@string/setting_sort_key"
+        app:useSimpleSummaryProvider="true"/>
+
+    <ListPreference
+        android:key="livingArea"
+        android:title="@string/setting_living_area_title"
+        android:entries="@array/living_area_labels"
+        android:entryValues="@array/living_area_values"
+        android:dialogTitle="@string/setting_living_area_title"
+        android:summary="@string/setting_living_area_summary"
+        android:defaultValue="@string/setting_living_area"
+        app:useSimpleSummaryProvider="true"/>
+</androidx.preference.PreferenceScreen>

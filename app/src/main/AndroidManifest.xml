@@ -26,7 +26,7 @@
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name=".TimerMenuActivity"
+        <activity android:name=".AlarmMenuActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".PlayMusicActivity"
             android:screenOrientation="portrait"/>

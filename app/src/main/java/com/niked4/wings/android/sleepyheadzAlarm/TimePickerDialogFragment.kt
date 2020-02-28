@@ -34,7 +34,7 @@ class TimePickerDialogFragment : DialogFragment(), TimePickerDialog.OnTimeSetLis
             val subMinute = arguments?.getInt("startMinute") ?: c.get(Calendar.HOUR_OF_DAY)
             alarmTime = (hour * 60 + minute - (subHour * 60 + subMinute) + 24 * 60) % (24 * 60)
         }
-        val tpd = TimePickerDialog(activity as TimerMenuActivity?,
+        val tpd = TimePickerDialog(activity as AlarmMenuActivity?,
             android.R.style.Theme_Holo_Dialog, this, hour, minute, DateFormat.is24HourFormat(activity))
         tpd.setTitle("$which time")
         return tpd
@@ -42,7 +42,7 @@ class TimePickerDialogFragment : DialogFragment(), TimePickerDialog.OnTimeSetLis
 
     override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int){
         //キーを元に開始時間の変更か終了時間の変更かを決定
-        val timerMenuActivity = activity as TimerMenuActivity
+        val timerMenuActivity = activity as AlarmMenuActivity
         val which =arguments?.getString("which")
         val connect = arguments?.getBoolean("connect")
         //start選択時

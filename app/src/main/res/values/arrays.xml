@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- firstTimeDiff -->
+    <string-array name="first_time_diff_values">
+        <item>5</item>
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+        <item>60</item>
+    </string-array>
+
+    <!-- firstCount -->
+    <string-array name="first_count_values">
+        <item>3</item>
+        <item>5</item>
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+    </string-array>
+
+    <!-- sortKey -->
+    <string-array name="sort_key_labels">
+        <item>Start</item>
+        <item>End</item>
+        <item>Count</item>
+        <item>Media</item>
+    </string-array>
+    <string-array name="sort_key_values">
+        <item>startHour</item>
+        <item>endHour</item>
+        <item>count</item>
+        <item>media</item>
+    </string-array>
+
+    <!-- livingArea -->
+    <string-array name="living_area_labels">
+        <item>水戸</item>
+        <item>宇都宮</item>
+        <item>前橋</item>
+        <item>さいたま</item>
+        <item>千葉</item>
+        <item>東京</item>
+        <item>横浜</item>
+    </string-array>
+    <string-array name="living_area_values">
+        <item>mito</item>
+        <item>utsunomiya</item>
+        <item>maebashi</item>
+        <item>saitama</item>
+        <item>chiba</item>
+        <item>tokyo</item>
+        <item>yokohama</item>
+    </string-array>
+</resources>

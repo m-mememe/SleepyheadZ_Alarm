@@ -1,21 +1,18 @@
 package com.niked4.wings.android.sleepyheadzAlarm
 
 import android.content.Intent
-import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import io.realm.Realm
 import io.realm.RealmResults
-import kotlin.coroutines.coroutineContext
 
 class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): RecyclerView.Adapter<ViewHolder>() {
     private lateinit var realm: Realm
     private val rResults: RealmResults<AlarmData> = realmResults
     private val ma = MainActivity()
-    private val tma = TimerMenuActivity()
+    private val tma = AlarmMenuActivity()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.alarm_view, parent, false)
@@ -43,7 +40,7 @@ class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): Recycler
 
         //タップ時に設定メニューを表示
         holder.itemView.setOnClickListener{
-            val intent = Intent(it.context, TimerMenuActivity::class.java)
+            val intent = Intent(it.context, AlarmMenuActivity::class.java)
             intent.putExtra("id", alarmData.id)
             it.context.startActivity(intent)
         }

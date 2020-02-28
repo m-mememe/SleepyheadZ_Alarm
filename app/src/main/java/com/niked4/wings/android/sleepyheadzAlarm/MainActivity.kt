@@ -16,6 +16,7 @@ import android.net.Uri
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import io.realm.RealmConfiguration
 import io.realm.kotlin.where
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         //Realmの準備
         Realm.init(this)
         val realmConfig = RealmConfiguration.Builder()
@@ -37,16 +39,19 @@ class MainActivity : AppCompatActivity() {
             .build()
         Realm.setDefaultConfiguration(realmConfig)
         realm = Realm.getDefaultInstance()
-
-        //データベースを元にセットされていたアラームを全てキャンセル
         val realmResults = realm.where(AlarmData::class.java)
             .findAll()
-            .sort("id", Sort.ASCENDING)
+        val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        val alarmList = findViewById<RecyclerView>(R.id.recyclerView)
+        alarmList.addItemDecoration(divider)
+
+        //セットされていたアラームを全てキャンセル
         val column = realm.where<AlarmData>().count()
         for(i in 0 until column.toInt()){
             val alarmData = realmResults[i]
             unregisterAlarmData(this, alarmData)
         }
+
         //アラームをセットする
         for(i in 0 until column.toInt()){
             val alarmData = realmResults[i]
@@ -56,24 +61,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart(){
+    override fun onStart() {
         super.onStart()
         //データベースからの読み出しとRecyclerViewの表示
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val sortKey = prefs.getString("sortKey", "startHour")!!
         val realmResults = realm.where(AlarmData::class.java)
             .findAll()
+            .sort("id", Sort.ASCENDING)
             .sort("media", Sort.ASCENDING)
             .sort("count", Sort.ASCENDING)
             .sort("endMinute", Sort.ASCENDING)
             .sort("endHour", Sort.ASCENDING)
             .sort("startMinute", Sort.ASCENDING)
             .sort("startHour", Sort.ASCENDING)
+            .sort(sortKey, Sort.ASCENDING)
         layoutManager = LinearLayoutManager(this)
         val alarmList = findViewById<RecyclerView>(R.id.recyclerView)
-        val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         alarmList.layoutManager = layoutManager
         adapter = CustomRecyclerViewAdapter(realmResults)
         alarmList.adapter = adapter
-        alarmList.addItemDecoration(divider)
     }
 
     override fun onDestroy() {
@@ -99,7 +106,7 @@ class MainActivity : AppCompatActivity() {
 
     //アラームの追加
     fun onAddAlarmClick(view: View){
-        val intent = Intent(this, TimerMenuActivity::class.java)
+        val intent = Intent(this, AlarmMenuActivity::class.java)
         startActivity(intent)
     }
 
@@ -111,19 +118,19 @@ class MainActivity : AppCompatActivity() {
 
     //アラームの開始時間と差分時間を求める
     private fun getStartDelta(startHour: Int?, startMinute: Int?, endHour: Int?, endMinute: Int?, count: Int?): Pair<Int, Double>{
-        //kotlinは負のmodをとっても負の値が返ってきてしまうため、onedayTimeを加えて調整する
-        val onedayTime = 24 * 60
+        //kotlinは負のmodをとっても負の値が返ってきてしまうため、oneDayTimeを加えて調整する
+        val oneDayTime = 24 * 60
         var startTime = (startHour ?: 0) * 60 + (startMinute ?: 0)
-        val alarmTime = ((endHour ?: 0) * 60 + (endMinute ?: 0) + onedayTime - startTime) % onedayTime
+        val alarmTime = ((endHour ?: 0) * 60 + (endMinute ?: 0) + oneDayTime - startTime) % oneDayTime
 
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
         val timeNow = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE)
         var deltaTime: Double = alarmTime.toDouble()
 
-        startTime += onedayTime
+        startTime += oneDayTime
         startTime -= timeNow
-        startTime %= onedayTime
+        startTime %= oneDayTime
         if(count == 1)
             deltaTime = 0.0
         else

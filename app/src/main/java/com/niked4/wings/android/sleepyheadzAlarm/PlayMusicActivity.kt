@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.preference.PreferenceManager
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStream
@@ -23,6 +24,15 @@ import java.util.*
 import kotlin.math.min
 
 class PlayMusicActivity: AppCompatActivity(){
+    val area2id = mapOf(
+        "mito"       to "080010",
+        "utsunomiya" to "090010",
+        "maebashi"   to "100010",
+        "saitama"    to "110010",
+        "chiba"      to "120010",
+        "tokyo"      to "130010",
+        "yokohama"   to "140010"
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +76,9 @@ class PlayMusicActivity: AppCompatActivity(){
 
     private inner class WeatherReceiver: AsyncTask<String, String, String>() {
         override fun doInBackground(vararg params: String?): String {
-            val id = 120010
+            val prefs = PreferenceManager.getDefaultSharedPreferences(this@PlayMusicActivity)
+            val town = prefs.getString("livingArea", "tokyo")
+            val id = area2id[town]
             val urlStr = "http://weather.livedoor.com/forecast/webservice/json/v1?city=${id}"
             val url = URL(urlStr)
             val con = url.openConnection() as HttpURLConnection
@@ -88,7 +100,9 @@ class PlayMusicActivity: AppCompatActivity(){
             val calendar = Calendar.getInstance()
             val clPlayMusic = findViewById<ConstraintLayout>(R.id.cl_play_music)
             val tvTitle = findViewById<TextView>(R.id.tv_title)
+            val tvTelop = findViewById<TextView>(R.id.tv_telop)
             val ivWeather = findViewById<ImageView>(R.id.tv_weather)
+            tvTelop.text = weather
 
             //情報を画面に反映
             tvTitle.text = title
@@ -102,11 +116,16 @@ class PlayMusicActivity: AppCompatActivity(){
                 "曇のち雨" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.cloudy2rainy))
                 "雨のち晴" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.rainy2sunny))
                 "雨のち曇" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.rainy2cloudy))
-                "晴時々曇" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny_or_cloudy))
-                "晴時々雨" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny_or_rainy))
-                "曇時々雨" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.cloudy_or_rainy))
+                "晴時々曇" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny_often_cloudy))
+                "晴時々雨" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.sunny_often_rainy))
+                "曇時々晴" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.cloudy_often_sunny))
+                "曇時々雨" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.cloudy_often_rainy))
+                "雨時々晴" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.rainy_often_sunny))
+                "雨時々曇" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.rainy_often_cloudy))
             }
-            if((weather == "晴れ") or (weather == "晴のち曇") or (weather == "晴時々曇")){
+            //特定の天気は表示を変える可能性がある
+            val sunny = Regex("晴")
+            if(sunny.containsMatchIn(weather)){
                 //昼の時
                 val hour = calendar.get(Calendar.HOUR_OF_DAY)
                 if((6 <= hour) and (hour <= 18)) {
@@ -114,13 +133,14 @@ class PlayMusicActivity: AppCompatActivity(){
                 }
                 //夜の時
                 else{
-                    Log.e("calendar", hour.toString())
                     when(weather){
                         "晴れ"     -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.moon))
                         "晴のち曇" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.moon2cloudy))
                         "晴のち雨" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.moon2rainy))
-                        "晴時々曇" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.moon_or_cloudy))
-                        "晴時々雨" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.moon_or_rainy))
+                        "晴時々曇" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.moon_often_cloudy))
+                        "晴時々雨" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.moon_often_rainy))
+                        "曇時々晴" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.cloudy_often_moon))
+                        "雨時々晴" -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.rainy_often_moon))
                     }
                 }
             }
