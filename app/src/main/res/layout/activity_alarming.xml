@@ -28,10 +28,10 @@
         android:textSize="72sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_weather" />
+        app:layout_constraintTop_toBottomOf="@+id/iv_weather" />
 
     <ImageView
-        android:id="@+id/tv_weather"
+        android:id="@+id/iv_weather"
         android:layout_width="216dp"
         android:layout_height="216dp"
         app:layout_constraintEnd_toEndOf="parent"

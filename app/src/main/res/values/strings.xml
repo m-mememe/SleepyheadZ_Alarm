@@ -28,6 +28,8 @@
     <!-- PlayMusicActivity -->
     <string name="bt_stop">STOP</string>
     <string name="tv_alarm_awake">時間だよ！起きて！</string>
+    <string name="tv_weather_search_question">詳細な天気を調べる？</string>
+    <string name="tv_weather_search">はい</string>
 
     <!-- NumberPickerDialogFragment -->
     <string name="np_dialog_title">Count</string>

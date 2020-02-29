@@ -1,11 +1,11 @@
 package com.niked4.wings.android.sleepyheadzAlarm
 
+import android.app.SearchManager
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import android.view.WindowManager
@@ -14,6 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.preference.PreferenceManager
+import com.google.android.material.snackbar.Snackbar
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStream
@@ -21,7 +22,6 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
-import kotlin.math.min
 
 class PlayMusicActivity: AppCompatActivity(){
     val area2id = mapOf(
@@ -32,6 +32,15 @@ class PlayMusicActivity: AppCompatActivity(){
         "chiba"      to "120010",
         "tokyo"      to "130010",
         "yokohama"   to "140010"
+    )
+    val area2kanji = mapOf(
+        "mito"       to "水戸",
+        "utsunomiya" to "宇都宮",
+        "maebashi"   to "前橋",
+        "saitama"    to "さいたま",
+        "chiba"      to "千葉",
+        "tokyo"      to "東京",
+        "yokohama"   to "横浜"
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +72,24 @@ class PlayMusicActivity: AppCompatActivity(){
         //天気情報の取得
         val receiver = WeatherReceiver()
         receiver.execute()
+
+        //天気画像にリスナをセット
+        val ivWeather = findViewById<ImageView>(R.id.iv_weather)
+        ivWeather.setOnClickListener {
+            //Snackbarで確認する
+            Snackbar.make(ivWeather, R.string.tv_weather_search_question, Snackbar.LENGTH_LONG)
+                .setAction(R.string.tv_weather_search, View.OnClickListener {
+                    //google検索で天気の詳細を調べる
+                    val prefs = PreferenceManager.getDefaultSharedPreferences(this@PlayMusicActivity)
+                    val town = prefs.getString("livingArea", "tokyo")
+                    val id = area2kanji[town]
+                    val intent = Intent(Intent.ACTION_WEB_SEARCH)
+                    intent.setClassName("com.google.android.googlequicksearchbox", "com.google.android.googlequicksearchbox.SearchActivity")
+                    intent.putExtra(SearchManager.QUERY, "天気 $id")
+                    startActivity(intent)
+                    finish()
+                }).show()
+        }
     }
 
     override fun onDestroy() {
@@ -101,7 +128,7 @@ class PlayMusicActivity: AppCompatActivity(){
             val clPlayMusic = findViewById<ConstraintLayout>(R.id.cl_play_music)
             val tvTitle = findViewById<TextView>(R.id.tv_title)
             val tvTelop = findViewById<TextView>(R.id.tv_telop)
-            val ivWeather = findViewById<ImageView>(R.id.tv_weather)
+            val ivWeather = findViewById<ImageView>(R.id.iv_weather)
             tvTelop.text = weather
 
             //情報を画面に反映
