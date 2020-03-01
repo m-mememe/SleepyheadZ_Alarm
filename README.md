@@ -3,7 +3,8 @@
 どうしても朝起きれない人に向けたアラーム。  
 朝が苦手に人がよくやる複数のアラームをセットするのを一括管理できるようにする。  
 
-![キャプチャ](https://user-images.githubusercontent.com/51912962/75369722-51308980-5907-11ea-9b92-9b6c6a20798e.PNG)
+![sleepyheadz_alarm_icon_for_Git](https://user-images.githubusercontent.com/51912962/75628063-d45c2300-5c18-11ea-915b-f7f589aaf3b5.png)
+![git_readme](https://user-images.githubusercontent.com/51912962/75628036-ad9dec80-5c18-11ea-9513-1ef3c743fb59.png)
 
 ## Overview
 
@@ -36,16 +37,26 @@ RecyclerView上のスイッチ切り替えによるアラームのセット・�
 ### TimerMenuActivity
 ```
 アラームの追加・削除（セット・リセットも同時に行う）
-アラームごとの着信音設定
+アラームごとの音楽設定
 開始時間と終了時間の同時変更
 ```
 
 ### PlayMusicActivity
 ```
 AlarmManagerによる呼び出し
-音楽（アラーム）の再生
-livedoorの天気APIを利用してアラーム鳴動時の天気表示
+指定した音楽（アラーム）の再生
+livedoorの天気APIを利用してアラーム鳴動時に天気を画像で表示
+天気画像をタップすることで天気の詳細をgoogle検索
 時間帯と天気により背景色変更
+```
+
+### SettingActivity
+```
+以下の設定
+・デフォルトの開始時間と終了時間の時間差
+・デフォルトのカウント数
+・ソートキーの選択
+・表示する天気の地域（関東圏）
 ```
 
 ## Requirements
@@ -54,3 +65,6 @@ livedoorの天気APIを利用してアラーム鳴動時の天気表示
 ## Test environment
 - Nexus 5X API28 (AVD)
 - Xperia XZs API26 (Real machine)
+
+## GooglePlayStore
+http://hoge.hoge
