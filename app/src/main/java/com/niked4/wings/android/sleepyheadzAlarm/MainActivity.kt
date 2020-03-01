@@ -139,13 +139,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     //アラームのセット
-    private fun registerAlarm(context: Context, str: String, minute: Int, media: String?){
+    fun registerAlarm(context: Context, alarmId: String, minute: Int, media: String?){
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
         calendar.add(Calendar.MINUTE, minute)
 
         val intent = Intent(context, AlarmBroadcastReceiver::class.java)
-        intent.type = str
+        intent.type = alarmId
+        intent.putExtra("alarmId", alarmId)
         intent.putExtra("media", media)
         val pending = PendingIntent.getBroadcast(context,0,intent,0)
         val am : AlarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager

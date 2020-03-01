@@ -9,6 +9,7 @@ class SettingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         //設定画面のfragmentを表示
         supportFragmentManager
