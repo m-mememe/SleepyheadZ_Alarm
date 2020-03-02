@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import android.view.WindowManager
@@ -16,9 +17,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.preference.PreferenceManager
 import com.google.android.material.snackbar.Snackbar
 import org.json.JSONObject
-import java.io.BufferedReader
-import java.io.InputStream
-import java.io.InputStreamReader
+import java.io.*
+import java.lang.RuntimeException
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
@@ -113,17 +113,30 @@ class PlayMusicActivity: AppCompatActivity(){
             val id = area2id[town]
             val urlStr = "http://weather.livedoor.com/forecast/webservice/json/v1?city=${id}"
             val url = URL(urlStr)
-            val con = url.openConnection() as HttpURLConnection
-            con.requestMethod = "GET"
-            con.connect()
-            val stream = con.inputStream
-            val result = is2String(stream)
-            con.disconnect()
-            stream.close()
-            return result
+            try {
+                val con = url.openConnection() as HttpURLConnection
+                con.requestMethod = "GET"
+                con.connect()
+                val stream = con.inputStream
+                val result = is2String(stream)
+                con.disconnect()
+                stream.close()
+                return result
+            }
+            catch (ex: IOException){
+                return "missedAccess"
+            }
         }
 
         override fun onPostExecute(result: String) {
+            //通信に失敗した場合
+            if(result == "missedAccess"){
+                Log.e("PlayMusicActivity", "HTTPリクエストに失敗")
+                findViewById<TextView>(R.id.tv_title).text = "通信に"
+                findViewById<TextView>(R.id.tv_telop).text = "失敗しました"
+                return
+            }
+
             val rootJSON = JSONObject(result)
             val title = rootJSON.getString("title")
             val forecasts = rootJSON.getJSONArray("forecasts")
@@ -135,10 +148,10 @@ class PlayMusicActivity: AppCompatActivity(){
             val tvTelop = findViewById<TextView>(R.id.tv_telop)
             val ivWeather = findViewById<ImageView>(R.id.iv_weather)
             val res = applicationContext.resources
-            tvTelop.text = weather
 
             //情報を画面に反映
             tvTitle.text = title
+            tvTelop.text = weather
             when(weather){
                 "晴れ"     -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(res, R.drawable.sunny))
                 "曇り"     -> ivWeather.setImageBitmap(BitmapFactory.decodeResource(res, R.drawable.cloudy))

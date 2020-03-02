@@ -13,4 +13,7 @@
         <item name="colorControlActivated">#21c1ff</item>
     </style>
 
+    <style name="DialogTheme" parent="android:Theme.Holo.Dialog">
+        <item name="colorAccent">@color/colorPrimaryDark</item>
+    </style>
 </resources>

@@ -1,10 +1,8 @@
 package com.niked4.wings.android.sleepyheadzAlarm
 
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.media.AudioAttributes
-import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.IBinder
@@ -13,11 +11,9 @@ import java.io.IOException
 
 class PlayMusicService : Service(), MediaPlayer.OnCompletionListener {
     private var _player: MediaPlayer? = null
-    private var _am: AudioManager? = null
 
     override fun onCreate() {
         _player = MediaPlayer()
-        _am = applicationContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -63,10 +59,10 @@ class PlayMusicService : Service(), MediaPlayer.OnCompletionListener {
             }
         }
         catch (ex: IllegalArgumentException){
-            Log.e("ServiceSample", "メディアプレーヤー準備時の例外発生")
+            Log.e("PlayMusicService", "メディアプレーヤー準備時の例外発生")
         }
         catch (ex: IOException){
-            Log.e("ServiceSample", "メディアプレーヤー準備時の例外発生")
+            Log.e("PlayMusicService", "メディアプレーヤー準備時の例外発生")
         }
     }
 

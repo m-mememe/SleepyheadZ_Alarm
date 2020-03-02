@@ -18,7 +18,6 @@ import java.util.*
 class AlarmMenuActivity : AppCompatActivity() {
     private lateinit var realm: Realm
     private val maxAlarmTime = 180
-    private val MEDIA_SELECT = 100
     private val ma = MainActivity()
 
     //アラームのパラメータ
@@ -31,6 +30,9 @@ class AlarmMenuActivity : AppCompatActivity() {
 
     //アラーム新規作成時の一回目の時間変更のみconnectをONにするためのフラグ
     private var _firstFlag = false
+
+    //リクエストコード
+    private val MEDIA_SELECT = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,52 +112,12 @@ class AlarmMenuActivity : AppCompatActivity() {
     //ボタン設定
     //開始時間（時間）を変更
     fun setStartTime(view: View) {
-        val fragment = TimePickerDialogFragment()
-        val args = Bundle()
-        val connectSwitch = this.sw_connect.isChecked
-        val startTimeText = this.bt_start_time.text.toString()
-        val endTimeText = this.bt_end_time.text.toString()
-        val startTimeArray = startTimeText.split(":")
-        val endTimeArray = endTimeText.split(":")
-        args.putString("which", "start")
-        args.putBoolean("connect", connectSwitch)
-        args.putInt("startHour", startTimeArray[0].trim().toInt())
-        args.putInt("startMinute", startTimeArray[1].trim().toInt())
-        args.putInt("endHour", endTimeArray[0].trim().toInt())
-        args.putInt("endMinute", endTimeArray[1].trim().toInt())
-        fragment.arguments = args
-        fragment.show(supportFragmentManager, "timePicker")
-
-        //アラーム新規作成時で初回時間変更後にconnectをOFFにする
-        if(_firstFlag){
-            findViewById<Switch>(R.id.sw_connect).isChecked = false
-            _firstFlag = false
-        }
+        showMyTimePickerFragment("start")
     }
 
     //終了時間を変更
     fun setEndTime(view: View){
-        val fragment = TimePickerDialogFragment()
-        val args = Bundle()
-        val connectSwitch = this.sw_connect.isChecked
-        val startTimeText = this.bt_start_time.text.toString()
-        val endTimeText = this.bt_end_time.text.toString()
-        val startTimeArray = startTimeText.split(":")
-        val endTimeArray = endTimeText.split(":")
-        args.putString("which", "end")
-        args.putBoolean("connect", connectSwitch)
-        args.putInt("startHour", startTimeArray[0].trim().toInt())
-        args.putInt("startMinute", startTimeArray[1].trim().toInt())
-        args.putInt("endHour", endTimeArray[0].trim().toInt())
-        args.putInt("endMinute", endTimeArray[1].trim().toInt())
-        fragment.arguments = args
-        fragment.show(supportFragmentManager, "timePicker")
-
-        //アラーム新規作成時で初回時間変更後にconnectをOFFにする
-        if(_firstFlag){
-            findViewById<Switch>(R.id.sw_connect).isChecked = false
-            _firstFlag = false
-        }
+        showMyTimePickerFragment("end")
     }
 
     fun setCountButton(view: View){
@@ -260,6 +222,31 @@ class AlarmMenuActivity : AppCompatActivity() {
         ma.deleteAlarmData(realm, alarmData)
         Toast.makeText(applicationContext, R.string.tv_alarm_delete, Toast.LENGTH_LONG).show()
         finish()
+    }
+
+    //時間のダイアログ呼び出し、whichにはstartかendを入れる
+    private fun showMyTimePickerFragment(which: String){
+        val fragment = MyTimePickerDialogFragment()
+        val args = Bundle()
+        val connectSwitch = this.sw_connect.isChecked
+        val startTimeText = this.bt_start_time.text.toString()
+        val endTimeText = this.bt_end_time.text.toString()
+        val startTimeArray = startTimeText.split(":")
+        val endTimeArray = endTimeText.split(":")
+        args.putString("which", which)
+        args.putBoolean("connect", connectSwitch)
+        args.putInt("startHour", startTimeArray[0].trim().toInt())
+        args.putInt("startMinute", startTimeArray[1].trim().toInt())
+        args.putInt("endHour", endTimeArray[0].trim().toInt())
+        args.putInt("endMinute", endTimeArray[1].trim().toInt())
+        fragment.arguments = args
+        fragment.show(supportFragmentManager, "timePicker")
+
+        //アラーム新規作成時で初回時間変更後にconnectをOFFにする
+        if(_firstFlag){
+            findViewById<Switch>(R.id.sw_connect).isChecked = false
+            _firstFlag = false
+        }
     }
 
     //補助的な関数

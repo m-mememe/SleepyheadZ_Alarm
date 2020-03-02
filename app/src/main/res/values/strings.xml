@@ -32,7 +32,7 @@
     <string name="tv_weather_search">はい</string>
 
     <!-- NumberPickerDialogFragment -->
-    <string name="np_dialog_title">Count</string>
+    <string name="np_dialog_title">count</string>
     <string name="np_dialog_ok">OK</string>
     <string name="np_dialog_ng">キャンセル</string>
 
@@ -46,4 +46,7 @@
     <string name="setting_sort_key_summary">アラーム表示のソート方法を変更するよ</string>
     <string name="setting_living_area_title">居住地</string>
     <string name="setting_living_area_summary">天気予報の地域を変更するよ</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
