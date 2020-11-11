@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.preference.PreferenceManager
 import com.google.android.material.snackbar.Snackbar
+import com.niked4.wings.android.sleepyheadzAlarm.MainActivity.Companion.registerAlarm
 import org.json.JSONObject
 import java.io.*
 import java.net.HttpURLConnection
@@ -71,7 +72,7 @@ class PlayMusicActivity: AppCompatActivity(){
         Toast.makeText(this, R.string.tv_alarm_awake, Toast.LENGTH_LONG).show()
 
         //24時間後に同じアラームをセットする
-        MainActivity().registerAlarm(this, alarmId, 24 * 60, media)
+        registerAlarm(this, alarmId, 24 * 60, media)
 
         //天気情報の取得
         val receiver = WeatherReceiver()

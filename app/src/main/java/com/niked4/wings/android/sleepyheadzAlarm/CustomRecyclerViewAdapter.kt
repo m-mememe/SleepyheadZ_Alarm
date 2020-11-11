@@ -5,14 +5,17 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.niked4.wings.android.sleepyheadzAlarm.AlarmMenuActivity.Companion.arrangeNumericString
+import com.niked4.wings.android.sleepyheadzAlarm.MainActivity.Companion.deleteAlarmData
+import com.niked4.wings.android.sleepyheadzAlarm.MainActivity.Companion.registerAlarmData
+import com.niked4.wings.android.sleepyheadzAlarm.MainActivity.Companion.unregisterAlarmData
+import com.niked4.wings.android.sleepyheadzAlarm.MainActivity.Companion.uriString2Title
 import io.realm.Realm
 import io.realm.RealmResults
 
 class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): RecyclerView.Adapter<ViewHolder>() {
     private lateinit var realm: Realm
     private val rResults: RealmResults<AlarmData> = realmResults
-    private val ma = MainActivity()
-    private val tma = AlarmMenuActivity()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.alarm_view, parent, false)
@@ -27,10 +30,10 @@ class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): Recycler
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         //データベースをもとにRecyclerViewの生成
         val alarmData = rResults[position]!!
-        val (startTime, endTime) = tma.arrangeNumericString(
+        val (startTime, endTime) = arrangeNumericString(
             alarmData.startHour, alarmData.startMinute, alarmData.endHour, alarmData.endMinute)
         val context = holder.itemView.context
-        val mediaTitle = ma.uriString2Title(context, alarmData.media)
+        val mediaTitle = uriString2Title(context, alarmData.media)
 
         holder.startTimeText?.text = startTime
         holder.endTimeText?.text = endTime
@@ -53,9 +56,9 @@ class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): Recycler
             }
             //アラームのセットorリセット
             if(isChecked)
-                ma.registerAlarmData(context, alarmData)
+                registerAlarmData(context, alarmData)
             else
-                ma.unregisterAlarmData(context, alarmData)
+                unregisterAlarmData(context, alarmData)
             realm.close()
         }
 
@@ -63,8 +66,8 @@ class CustomRecyclerViewAdapter(realmResults: RealmResults<AlarmData>): Recycler
         holder.itemView.setOnCreateContextMenuListener{menu, view, _ ->
             realm = Realm.getDefaultInstance()
             menu.add(R.string.bt_delete).setOnMenuItemClickListener {
-                ma.unregisterAlarmData(view.context, alarmData)
-                ma.deleteAlarmData(realm, alarmData)
+                unregisterAlarmData(view.context, alarmData)
+                deleteAlarmData(realm, alarmData)
                 Toast.makeText(view.context, R.string.tv_alarm_delete, Toast.LENGTH_SHORT).show()
                 notifyDataSetChanged()
                 true

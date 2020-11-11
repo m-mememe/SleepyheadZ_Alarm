@@ -116,87 +116,95 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, R.string.tv_snooze, Toast.LENGTH_SHORT).show()
     }
 
-    //アラームの開始時間と差分時間を求める
-    private fun getStartDelta(startHour: Int?, startMinute: Int?, endHour: Int?, endMinute: Int?, count: Int?): Pair<Int, Double>{
-        //kotlinは負のmodをとっても負の値が返ってきてしまうため、oneDayTimeを加えて調整する
-        val oneDayTime = 24 * 60
-        var startTime = (startHour ?: 0) * 60 + (startMinute ?: 0)
-        val alarmTime = ((endHour ?: 0) * 60 + (endMinute ?: 0) + oneDayTime - startTime) % oneDayTime
+    companion object {
+        //アラームの開始時間と差分時間を求める
+        private fun getStartDelta(startHour: Int?, startMinute: Int?, endHour: Int?, endMinute: Int?, count: Int?): Pair<Int, Double>{
+            //kotlinは負のmodをとっても負の値が返ってきてしまうため、oneDayTimeを加えて調整する
+            val oneDayTime = 24 * 60
+            var startTime = (startHour ?: 0) * 60 + (startMinute ?: 0)
+            val alarmTime = ((endHour ?: 0) * 60 + (endMinute ?: 0) + oneDayTime - startTime) % oneDayTime
 
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = System.currentTimeMillis()
-        val timeNow = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE)
-        var deltaTime: Double = alarmTime.toDouble()
+            val calendar = Calendar.getInstance()
+            calendar.timeInMillis = System.currentTimeMillis()
+            val timeNow = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE)
+            var deltaTime: Double = alarmTime.toDouble()
 
-        startTime += oneDayTime
-        startTime -= timeNow
-        startTime %= oneDayTime
-        if(count == 1)
-            deltaTime = 0.0
-        else
-            deltaTime /= (count ?: 0) - 1
-        return Pair(startTime, deltaTime)
-    }
-
-    //アラームのセット
-    fun registerAlarm(context: Context, alarmId: String, minute: Int, media: String?){
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = System.currentTimeMillis()
-        calendar.add(Calendar.MINUTE, minute)
-
-        val intent = Intent(context, AlarmBroadcastReceiver::class.java)
-        intent.type = alarmId
-        intent.putExtra("alarmId", alarmId)
-        intent.putExtra("media", media)
-        val pending = PendingIntent.getBroadcast(context,0,intent,0)
-        val am : AlarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
-        am.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pending)
-    }
-
-    //アラームのリセット
-     private fun unregisterAlarm(context: Context, str: String){
-        val intent = Intent(context, AlarmBroadcastReceiver::class.java)
-        intent.type = str
-        val pending = PendingIntent.getBroadcast(context,0,intent,0)
-        val am : AlarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
-        pending.cancel()
-        am.cancel(pending)
-    }
-
-    //alarmData単位でのセット
-    fun registerAlarmData(context: Context, alarmData: AlarmData?){
-        val startDelta = getStartDelta(alarmData?.startHour, alarmData?.startMinute, alarmData?.endHour, alarmData?.endMinute, alarmData?.count)
-        val startTime = startDelta.first
-        val deltaTime = startDelta.second
-        for(j in 0 until (alarmData?.count ?: 0)) {
-            val alarmId = "alarm:${alarmData?.id}.${j}"
-            val addTime  = kotlin.math.floor(startTime + j * deltaTime).toInt() % (24 * 60)
-            registerAlarm(context, alarmId, addTime, alarmData?.media)
+            startTime += oneDayTime
+            startTime -= timeNow
+            startTime %= oneDayTime
+            if(count == 1)
+                deltaTime = 0.0
+            else
+                deltaTime /= (count ?: 0) - 1
+            return Pair(startTime, deltaTime)
         }
-    }
 
-    //alarmData単位でのリセット
-    fun unregisterAlarmData(context: Context, alarmData: AlarmData?){
-        for(j in 0 until (alarmData?.count ?: 0)) {
-            val alarmId = "alarm:${alarmData?.id}.${j}"
-            unregisterAlarm(context, alarmId)
+        //アラームのセット
+        fun registerAlarm(context: Context, alarmId: String, minute: Int, media: String?) {
+            val calendar = Calendar.getInstance()
+            calendar.timeInMillis = System.currentTimeMillis()
+            calendar.add(Calendar.MINUTE, minute)
+
+            val intent = Intent(context, AlarmBroadcastReceiver::class.java)
+            intent.type = alarmId
+            intent.putExtra("alarmId", alarmId)
+            intent.putExtra("media", media)
+            val pending = PendingIntent.getBroadcast(context, 0, intent, 0)
+            val am: AlarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
+            am.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pending)
         }
-    }
 
-    //alarmDataIdのデータをデータベースから消す
-    fun deleteAlarmData(realm: Realm, alarmData: AlarmData?){
-        val alarmDataId = alarmData?.id
-        realm.executeTransaction{
-            realm.where<AlarmData>()
-                .equalTo("id", alarmDataId)
-                ?.findFirst()
-                ?.deleteFromRealm()
+        //アラームのリセット
+        private fun unregisterAlarm(context: Context, str: String) {
+            val intent = Intent(context, AlarmBroadcastReceiver::class.java)
+            intent.type = str
+            val pending = PendingIntent.getBroadcast(context, 0, intent, 0)
+            val am: AlarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
+            pending.cancel()
+            am.cancel(pending)
         }
-    }
 
-    //Uriをもとにメディアのタイトルを取得する
-    fun uriString2Title(context: Context, uriString: String): String{
-        val media = RingtoneManager.getRingtone(context, Uri.parse(uriString))
-        return media.getTitle(context)
+        //alarmData単位でのセット
+        fun registerAlarmData(context: Context, alarmData: AlarmData?) {
+            val startDelta = getStartDelta(
+                alarmData?.startHour,
+                alarmData?.startMinute,
+                alarmData?.endHour,
+                alarmData?.endMinute,
+                alarmData?.count
+            )
+            val startTime = startDelta.first
+            val deltaTime = startDelta.second
+            for (j in 0 until (alarmData?.count ?: 0)) {
+                val alarmId = "alarm:${alarmData?.id}.${j}"
+                val addTime = kotlin.math.floor(startTime + j * deltaTime).toInt() % (24 * 60)
+                registerAlarm(context, alarmId, addTime, alarmData?.media)
+            }
+        }
+
+        //alarmData単位でのリセット
+        fun unregisterAlarmData(context: Context, alarmData: AlarmData?) {
+            for (j in 0 until (alarmData?.count ?: 0)) {
+                val alarmId = "alarm:${alarmData?.id}.${j}"
+                unregisterAlarm(context, alarmId)
+            }
+        }
+
+        //alarmDataIdのデータをデータベースから消す
+        fun deleteAlarmData(realm: Realm, alarmData: AlarmData?) {
+            val alarmDataId = alarmData?.id
+            realm.executeTransaction {
+                realm.where<AlarmData>()
+                    .equalTo("id", alarmDataId)
+                    ?.findFirst()
+                    ?.deleteFromRealm()
+            }
+        }
+
+        //Uriをもとにメディアのタイトルを取得する
+        fun uriString2Title(context: Context, uriString: String): String {
+            val media = RingtoneManager.getRingtone(context, Uri.parse(uriString))
+            return media.getTitle(context)
+        }
     }
 }

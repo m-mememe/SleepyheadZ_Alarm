@@ -5,12 +5,12 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.NumberPicker
 import androidx.fragment.app.DialogFragment
+import com.niked4.wings.android.sleepyheadzAlarm.AlarmMenuActivity.Companion.arrangeNumericString
 import kotlinx.android.synthetic.main.activity_menu_alarm.*
 import java.util.*
 
@@ -141,7 +141,7 @@ class MyTimePickerDialogFragment : DialogFragment() {
                     if(which == "start") {
                         val endHour = ((_hour * 60 + _minute + alarmTime) / 60) % 24
                         val endMinute = (_hour * 60 + _minute + alarmTime) % 60
-                        val (startTime, endTime) = alarmMenuActivity.arrangeNumericString(_hour, _minute, endHour, endMinute)
+                        val (startTime, endTime) = arrangeNumericString(_hour, _minute, endHour, endMinute)
                         alarmMenuActivity.bt_start_time.text = " $startTime "
                         //コネクトスイッチがONだったらもう片方も修正
                         if(connect == true){
@@ -152,7 +152,7 @@ class MyTimePickerDialogFragment : DialogFragment() {
                     else if(which == "end") {
                         val startHour = ((_hour * 60 + _minute - alarmTime + 24 * 60) / 60) % 24
                         val startMinute = (_hour * 60 + _minute - alarmTime + 60) % 60
-                        val (startTime, endTime) = alarmMenuActivity.arrangeNumericString(startHour, startMinute, _hour, _minute)
+                        val (startTime, endTime) = arrangeNumericString(startHour, startMinute, _hour, _minute)
                         alarmMenuActivity.bt_end_time.text = " $endTime "
                         //コネクトスイッチがONだったらもう片方も修正
                         if(connect == true){

@@ -9,6 +9,10 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.preference.PreferenceManager
+import com.niked4.wings.android.sleepyheadzAlarm.MainActivity.Companion.deleteAlarmData
+import com.niked4.wings.android.sleepyheadzAlarm.MainActivity.Companion.registerAlarmData
+import com.niked4.wings.android.sleepyheadzAlarm.MainActivity.Companion.unregisterAlarmData
+import com.niked4.wings.android.sleepyheadzAlarm.MainActivity.Companion.uriString2Title
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
@@ -18,7 +22,6 @@ import java.util.*
 class AlarmMenuActivity : AppCompatActivity() {
     private lateinit var realm: Realm
     private val maxAlarmTime = 180
-    private val ma = MainActivity()
 
     //アラームのパラメータ
     private var _startHour = 0
@@ -71,7 +74,7 @@ class AlarmMenuActivity : AppCompatActivity() {
         }
         //EndTimeの更新と描画
         val (startTime, endTime) = arrangeNumericString(_startHour, _startMinute, _endHour, _endMinute)
-        val mediaTitle = ma.uriString2Title(this, _media)
+        val mediaTitle = uriString2Title(this, _media)
         val btStartTime = findViewById<Button>(R.id.bt_start_time)
         val btEndTime = findViewById<Button>(R.id.bt_end_time)
         val btSetCount = findViewById<Button>(R.id.bt_set_count)
@@ -96,7 +99,7 @@ class AlarmMenuActivity : AppCompatActivity() {
                 if(uri.toString() == "null")
                     return
                 _media = uri.toString()
-                val mediaTitle = ma.uriString2Title(this, _media)
+                val mediaTitle = uriString2Title(this, _media)
                 val btMedia = findViewById<Button>(R.id.bt_media)
                 btMedia.text = mediaTitle
             }
@@ -181,7 +184,7 @@ class AlarmMenuActivity : AppCompatActivity() {
                 else -> {
                     //アラームが作成済みならアラームのキャンセルをする
                     val alarmData = realm.where<AlarmData>().equalTo("id", alarmDataId).findFirst()
-                    ma.unregisterAlarmData(this, alarmData)
+                    unregisterAlarmData(this, alarmData)
                     //データベースのアラームのデータを編集
                     realm.executeTransaction {
                         val alarmData = realm.where<AlarmData>().equalTo("id", alarmDataId).findFirst()
@@ -198,7 +201,7 @@ class AlarmMenuActivity : AppCompatActivity() {
 
             //アラームをセット
             val alarmData = realm.where<AlarmData>().equalTo("id", alarmDataId).findFirst()
-            ma.registerAlarmData(this, alarmData)
+            registerAlarmData(this, alarmData)
             Toast.makeText(applicationContext, R.string.tv_alarm_set, Toast.LENGTH_LONG).show()
             finish()
         }
@@ -218,8 +221,8 @@ class AlarmMenuActivity : AppCompatActivity() {
         //アラームのキャンセルとデータベースからの削除
         val alarmDataId = intent.getLongExtra("id", 0L)
         val alarmData = realm.where<AlarmData>().equalTo("id", alarmDataId).findFirst()
-        ma.unregisterAlarmData(this, alarmData)
-        ma.deleteAlarmData(realm, alarmData)
+        unregisterAlarmData(this, alarmData)
+        deleteAlarmData(realm, alarmData)
         Toast.makeText(applicationContext, R.string.tv_alarm_delete, Toast.LENGTH_LONG).show()
         finish()
     }
@@ -251,24 +254,26 @@ class AlarmMenuActivity : AppCompatActivity() {
     }
 
     //補助的な関数
-    //見やすいように文字列を調節、半角スペース2つで数字1文字分
-    fun arrangeNumericString(startHour: Int, startMinute: Int, endHour: Int, endMinute: Int): Pair<String, String>{
-        var startTime = ""
-        var endTime = ""
+    companion object {
+        //見やすいように文字列を調節、半角スペース2つで数字1文字分
+        fun arrangeNumericString(startHour: Int, startMinute: Int, endHour: Int, endMinute: Int): Pair<String, String> {
+            var startTime = ""
+            var endTime = ""
 
-        if(startHour < 10)
-            startTime += "  "
-        startTime += "$startHour : "
-        if(startMinute < 10)
-            startTime += "0"
-        startTime += startMinute
-        if(endHour < 10)
-            endTime += "  "
-        endTime += "$endHour : "
-        if(endMinute < 10)
-            endTime += "0"
-        endTime += endMinute
+            if (startHour < 10)
+                startTime += "  "
+            startTime += "$startHour : "
+            if (startMinute < 10)
+                startTime += "0"
+            startTime += startMinute
+            if (endHour < 10)
+                endTime += "  "
+            endTime += "$endHour : "
+            if (endMinute < 10)
+                endTime += "0"
+            endTime += endMinute
 
-        return Pair(startTime, endTime)
+            return Pair(startTime, endTime)
+        }
     }
 }
