@@ -6,7 +6,7 @@
 ![sleepyheadz_alarm_icon_for_Git](https://user-images.githubusercontent.com/51912962/75628063-d45c2300-5c18-11ea-915b-f7f589aaf3b5.png)
 ![git_readme](https://user-images.githubusercontent.com/51912962/75628036-ad9dec80-5c18-11ea-9513-1ef3c743fb59.png)
 
-## Overview
+# Overview
 
 特徴しては複数のアラームを一括で管理する点。  
 アラームは開始時間と終了時間、鳴らす回数の3つを設定する。  
@@ -18,30 +18,31 @@ digit = (Stop - Start) / (Count - 1)
 例として以下のように動作する。 
 
 e.g.)  
-Start: 7:00, Stop: 7:20, Count: 6  
+Start: 6:40, Stop: 7:00, Count: 5  
 ↓  
-digit: 4 minutes  
-Ring at: 7:00, 7:04, 7:08, 7:12, 7:16, 7:20  
+digit: 5 minutes  
+Ring at: 6:40, 6:45, 6:50, 6:55, 7:00  
 
-## Detail
+# Detail
 
 各アクティビティでしてる・できること
 
-### MainActivity
+## MainActivity
 ```
 起動時に全アラームのセット・リセット
 RecyclerView上のスイッチ切り替えによるアラームのセット・リセット
 コンテキストメニューでのアラーム削除
 ```
 
-### TimerMenuActivity
+## TimerMenuActivity
 ```
 アラームの追加・削除（セット・リセットも同時に行う）
 アラームごとの音楽設定
+自作ダイアログによる快適な時間変更
 開始時間と終了時間の同時変更
 ```
 
-### PlayMusicActivity
+## PlayMusicActivity
 ```
 AlarmManagerによる呼び出し
 指定した音楽（アラーム）の再生
@@ -50,7 +51,7 @@ livedoorの天気APIを利用してアラーム鳴動時に天気を画像で表
 時間帯と天気により背景色変更
 ```
 
-### SettingActivity
+## SettingActivity
 ```
 以下の設定
 ・デフォルトの開始時間と終了時間の時間差
@@ -59,12 +60,12 @@ livedoorの天気APIを利用してアラーム鳴動時に天気を画像で表
 ・表示する天気の地域（関東圏）
 ```
 
-## Requirements
+# Requirements
 - Realm
 
-## Test environment
+# Test environment
 - Nexus 5X API28 (AVD)
 - Xperia XZs API26 (Real machine)
 
-## GooglePlayStore
-http://hoge.hoge
+# GooglePlayStore
+https://play.google.com/store/apps/details?id=com.niked4.wings.android.sleepyheadzAlarm
