@@ -11,7 +11,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.NumberPicker
 import androidx.fragment.app.DialogFragment
-import kotlinx.android.synthetic.main.activity_menu_timer.*
+import kotlinx.android.synthetic.main.activity_menu_alarm.*
 import java.util.*
 
 class MyTimePickerDialogFragment : DialogFragment() {

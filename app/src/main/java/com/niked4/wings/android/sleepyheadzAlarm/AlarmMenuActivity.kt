@@ -12,7 +12,7 @@ import androidx.preference.PreferenceManager
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
-import kotlinx.android.synthetic.main.activity_menu_timer.*
+import kotlinx.android.synthetic.main.activity_menu_alarm.*
 import java.util.*
 
 class AlarmMenuActivity : AppCompatActivity() {
@@ -36,7 +36,7 @@ class AlarmMenuActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_menu_timer)
+        setContentView(R.layout.activity_menu_alarm)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         realm = Realm.getDefaultInstance()
 
@@ -224,6 +224,7 @@ class AlarmMenuActivity : AppCompatActivity() {
         finish()
     }
 
+    //onClickではないメソッド
     //時間のダイアログ呼び出し、whichにはstartかendを入れる
     private fun showMyTimePickerFragment(which: String){
         val fragment = MyTimePickerDialogFragment()

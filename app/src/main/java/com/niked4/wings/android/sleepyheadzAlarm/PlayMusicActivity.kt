@@ -18,7 +18,6 @@ import androidx.preference.PreferenceManager
 import com.google.android.material.snackbar.Snackbar
 import org.json.JSONObject
 import java.io.*
-import java.lang.RuntimeException
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
